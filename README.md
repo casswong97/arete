@@ -1,1 +1,2 @@
-# arete
+# Arete
+# Team
