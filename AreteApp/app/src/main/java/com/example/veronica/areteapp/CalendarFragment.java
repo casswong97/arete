@@ -7,12 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
-
+import android.widget.Toast;
+import android.support.annotation.NonNull;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends Fragment implements CalendarView.OnClickListener
+public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener
 {
     CalendarView calendarView;
 
@@ -23,17 +24,19 @@ public class CalendarFragment extends Fragment implements CalendarView.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
+        View rootview = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        calendarView = getView().findViewById(R.id.calendarView);
-
+        calendarView = rootview.findViewById(R.id.calendarView);
+        calendarView.setOnDateChangeListener(this);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calendar, container, false);
+        return rootview;
     }
 
     @Override
-    public void onClick(View v) {
-
-
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
+    {
+        Toast.makeText(getActivity(), Integer.toString(dayOfMonth), Toast.LENGTH_SHORT).show();
     }
 }
