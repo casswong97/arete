@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1040322646983",
+    "firebase_url": "https://areteapp-d6572.firebaseio.com",
+    "project_id": "areteapp-d6572",
+    "storage_bucket": "areteapp-d6572.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1040322646983:android:85bcd1882e83748e",
+        "android_client_info": {
+          "package_name": "com.example.veronica.areteapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1040322646983-6h33tpfno1rhnsi24olrtv6aeo9qhso8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.veronica.areteapp",
+            "certificate_hash": "39c1c97812c4658b3de1fd1a92d4b8dcb1b53ca7"
+          }
+        },
+        {
+          "client_id": "1040322646983-ubrjc1d93dkhes6gmk2hd9mcpsn8p8tp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy0fqUmsW-O_Pys2sG6FVGhksWW71ac2s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1040322646983-ubrjc1d93dkhes6gmk2hd9mcpsn8p8tp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
