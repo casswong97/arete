@@ -14,4 +14,8 @@
         android:id="@+id/calendarNav"
         android:icon="@mipmap/baseline_insert_invitation_black_48"
         android:title="Calendar" />
+    <item
+        android:id="@+id/journalNav"
+        android:icon="@drawable/baseline_border_color_black_24"
+        android:title="Reflection" />
 </menu>

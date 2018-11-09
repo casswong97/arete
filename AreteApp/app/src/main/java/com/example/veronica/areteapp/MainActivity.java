@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private HomeFragment homeFragment;
     private ListFragment listFragment;
     private CalendarFragment calendarFragment;
+    private JournalFragment journalFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         homeFragment = new HomeFragment();
         listFragment = new ListFragment();
         calendarFragment = new CalendarFragment();
+        journalFragment = new JournalFragment();
 
         setFragment(homeFragment);
         mMainNav.setOnNavigationItemSelectedListener(this);
@@ -51,6 +53,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
             case R.id.calendarNav:
                 setFragment(calendarFragment);
+                return true;
+            case R.id.journalNav:
+                setFragment(journalFragment);
                 return true;
 
             default:

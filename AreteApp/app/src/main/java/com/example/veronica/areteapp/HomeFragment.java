@@ -31,13 +31,13 @@ public class HomeFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-       // TODO needs to be dynamic
-//       textGreeting = (TextView) getActivity().findViewById(R.id.textGreeting);
-//       editTextAnswer = (EditText) getView().findViewById(R.id.editTextAnswer);
-//       buttonEdit = (ImageButton) getView().findViewById(R.id.buttonEdit);
+        View rootview = inflater.inflate(R.layout.fragment_home, container, false);
+        textGreeting = (TextView)rootview.findViewById(R.id.textGreeting);
+        editTextAnswer = (EditText) rootview.findViewById(R.id.editTextAnswer);
+        buttonEdit = (ImageButton) rootview.findViewById(R.id.buttonEdit);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return rootview;
     }
 
 }
