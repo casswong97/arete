@@ -6,9 +6,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -16,13 +19,11 @@ import java.util.Date;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomeFragment extends Fragment
+public class HomeFragment extends Fragment implements Button.OnClickListener
 {
-
     private EditText editGreeting;
     private EditText editTextAnswer;
     private ImageButton buttonEdit;
-
 
     public HomeFragment() {
         // Required empty public constructor
@@ -37,6 +38,7 @@ public class HomeFragment extends Fragment
         editGreeting = (EditText) rootview.findViewById(R.id.editGreeting);
         editTextAnswer = (EditText) rootview.findViewById(R.id.editTextAnswer);
         buttonEdit = (ImageButton) rootview.findViewById(R.id.buttonEdit);
+        buttonEdit.setOnClickListener(this);
 
         setGreeting();
 
@@ -69,6 +71,16 @@ public class HomeFragment extends Fragment
         {
             greeting = "Good Night!";
             editGreeting.setText(greeting);
+        }
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+            case R.id.buttonEdit:
+                Toast.makeText(getActivity(), "You've submitted your daily goal!", Toast.LENGTH_SHORT).show();
         }
     }
 }

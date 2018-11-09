@@ -14,17 +14,13 @@
         android:textAppearance="?android:textAppearanceLarge" />
 
     <CheckBox
-        android:id="@+id/list_item_task_done_button"
+        android:id="@+id/checkTaskButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:focusable="false"
+        android:clickable="true"/>
 
-    <!--<ImageButton-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_weight="3"-->
-        <!--app:srcCompat="@drawable/baseline_check_circle_black_24"-->
-        <!--android:id="@+id/list_item_task_done_button"/>-->
 
 
 </LinearLayout>

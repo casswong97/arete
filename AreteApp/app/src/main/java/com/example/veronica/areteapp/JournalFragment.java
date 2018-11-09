@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,16 +23,21 @@ import java.util.Locale;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JournalFragment extends Fragment
+public class JournalFragment extends Fragment implements Button.OnClickListener
 {
     private EditText editDate;
     ArrayAdapter<String> mTaskAdapter;
+    private Button buttonSubmit;
 
     public JournalFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     *
+     * Found ToDo list code here:
+     * http://muggingsg.com/university/android-app-tutorial-todo-app-using-fragments/#2_Creating_a_List_of_Tasks
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -40,13 +47,14 @@ public class JournalFragment extends Fragment
         editDate = rootview.findViewById(R.id.editDate);
         setDate();
 
+        buttonSubmit = rootview.findViewById(R.id.buttonSubmit);
+        buttonSubmit.setOnClickListener(this);
+
         //Create the fake data
         String[] fakeData = {
-                "Revise for exam",
-                "Buy milk",
-                "Do laundry",
-                "Call Melissa",
-                "Buy stamps",
+                "Finish App",
+                "Groceries",
+                "Walk Dog",
         };
         List<String> tasks = new ArrayList<String>(Arrays.asList(fakeData));
 
@@ -70,5 +78,15 @@ public class JournalFragment extends Fragment
     {
         Calendar cal=Calendar.getInstance();
         editDate.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", new java.util.Date()));
+    }
+
+    @Override
+    public void onClick(View v)
+    {
+        switch (v.getId())
+        {
+            case R.id.buttonSubmit:
+                Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
+        }
     }
 }
