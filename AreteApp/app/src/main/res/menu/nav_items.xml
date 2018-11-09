@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/homeNav"
+        android:icon="@mipmap/baseline_home_black_24"
+        android:title="Home" />
+    <item
+        android:id="@+id/listNav"
+        android:icon="@mipmap/baseline_list_black_24"
+        android:title="To Do" />
+    <item
+        android:id="@+id/calendarNav"
+        android:icon="@mipmap/baseline_insert_invitation_black_48"
+        android:title="Calendar" />
+    <item
+        android:id="@+id/journalNav"
+        android:icon="@drawable/baseline_border_color_black_24"
+        android:title="Reflection" />
+</menu>
