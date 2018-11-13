@@ -3,6 +3,7 @@ package com.example.veronica.areteapp;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,8 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
     {
-        Toast.makeText(getActivity(), Integer.toString(dayOfMonth), Toast.LENGTH_SHORT).show();
+        AppCompatActivity activity = (AppCompatActivity) view.getContext();
+        Fragment myFragment = new JournalFragment();
+        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
     }
 }

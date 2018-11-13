@@ -11,7 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,24 +29,28 @@ import java.util.List;
 public class ListFragment extends Fragment
 {
     ArrayAdapter<String> mTaskAdapter;
+    Button checkTaskButton;
 
     public ListFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     *
+     * Found ToDo list code here:
+     * http://muggingsg.com/university/android-app-tutorial-todo-app-using-fragments/#2_Creating_a_List_of_Tasks
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View rootview = inflater.inflate(R.layout.fragment_list, container, false);
+
         //Create the fake data
         String[] fakeData = {
-                "Revise for exam",
-                "Buy milk",
-                "Do laundry",
-                "Call Melissa",
-                "Buy stamps",
+                "Finish App",
+                "Groceries",
+                "Walk Dog",
         };
         List<String> tasks = new ArrayList<String>(Arrays.asList(fakeData));
 
@@ -99,4 +105,21 @@ public class ListFragment extends Fragment
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+//                Toast.makeText(getActivity(), "HELLO", Toast.LENGTH_LONG).show();
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                builder.setTitle("Hooray! You completed a goal");
+//                builder.setMessage("Do you want to add a reflection about this goal?");
+//                final EditText inputField = new EditText(getActivity());
+//                builder.setView(inputField);
+//                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface di, int i) {
+//                        Toast.makeText(getActivity(), inputField.getText(), Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//                builder.setNegativeButton("Cancel", null);
+//                builder.create().show();
+
 }
