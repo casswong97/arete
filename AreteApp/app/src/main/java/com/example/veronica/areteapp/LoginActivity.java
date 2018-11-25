@@ -16,6 +16,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class LoginActivity extends Activity implements Button.OnClickListener {
 
@@ -46,13 +53,12 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if (user != null)
-                {
+                if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_id:" + user.getUid());
+                    String uid = user.getUid();
                 }
-                else
-                {
+                else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out:");
                 }
@@ -111,21 +117,17 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
                         // if signin fails, display a msg to user
                         Toast toast;
-                        if (!task.isSuccessful())
-                        {
-                            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\n Do you already have an account?", Toast.LENGTH_SHORT);
+                        if (!task.isSuccessful()) {
+                            toast = Toast.makeText(LoginActivity.this, "Account Creation Failed.\n Do you already have an account?", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         }
-                        else
-                        {
+                        else {
                             toast = Toast.makeText(LoginActivity.this, "Success!\n Account Created!", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
-
                         }
                     }
                 });
@@ -144,15 +146,13 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                         // if sign in fails display msg
                         Toast toast;
 
-                        if (!task.isSuccessful())
-                        {
+                        if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\n Did you create an Account?", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         }
-                        else
-                        {
+                        else {
                             toast = Toast.makeText(LoginActivity.this, "Success!\n You are logged in!", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
