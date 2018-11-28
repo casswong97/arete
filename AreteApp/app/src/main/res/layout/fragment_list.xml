@@ -10,28 +10,56 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
             android:layout_marginStart="0dp"
             android:layout_marginLeft="0dp"
             android:layout_marginTop="3dp"
+            android:padding="5dp"
             android:text="To Do List"
             android:textSize="24sp"
             app:fontFamily="Perpetua Titling MT" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Switch
+                android:id="@+id/switchShowCompletedTasks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/textViewCompleted"
+                android:layout_toRightOf="@+id/textViewCompleted"
+                android:theme="@style/SwitchTheme"
+                tools:checked="false" />
+
+            <TextView
+                android:id="@+id/textViewCompleted"
+                android:layout_width="316dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginLeft="0dp"
+                android:padding="5dp"
+                android:text="Show Completed Tasks"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="15sp" />
+
+        </RelativeLayout>
+
 
         <ListView
             android:id="@+id/listViewTask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:layout_marginStart="0dp"
             android:layout_marginLeft="0dp"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:padding="5dp" />
 
 
     </LinearLayout>

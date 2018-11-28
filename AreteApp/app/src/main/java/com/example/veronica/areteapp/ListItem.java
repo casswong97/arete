@@ -4,12 +4,14 @@ public class ListItem
 {
 	String text = null;
 	boolean selected = false;
+	boolean visible = true;
 
-	public ListItem(String text, boolean selected)
+	public ListItem(String text, boolean selected, boolean visible)
 	{
 		super();
 		this.text = text;
 		this.selected = selected;
+		this.visible = visible;
 	}
 
 	public String getText()
@@ -32,4 +34,13 @@ public class ListItem
 		this.selected = selected;
 	}
 
+	public boolean isVisible()
+	{
+		return visible;
+	}
+
+	public void setVisible(boolean visible)
+	{
+		this.visible = visible;
+	}
 }
