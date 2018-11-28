@@ -1,6 +1,8 @@
 package com.example.veronica.areteapp;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -12,6 +14,7 @@ import android.widget.FrameLayout;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
+
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
 

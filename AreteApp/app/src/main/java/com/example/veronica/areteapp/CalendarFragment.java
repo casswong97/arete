@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -36,10 +37,13 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     }
 
     @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth, MenuItem item)
     {
         AppCompatActivity activity = (AppCompatActivity) view.getContext();
         Fragment myFragment = new JournalFragment();
         activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+
+        item.getItemId(R.id.journalNav.setFragment(journalFragment));
+        //have bottom nav menu change with set fragment
     }
 }
