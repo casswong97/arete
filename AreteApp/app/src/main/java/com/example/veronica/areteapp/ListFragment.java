@@ -103,6 +103,7 @@ public class ListFragment extends Fragment
 
 				convertView.setTag(holder);
 
+				final ViewHolder finalHolder = holder;
 				holder.checkBox.setOnClickListener(new View.OnClickListener()
 				{
 					public void onClick(View v)
@@ -116,6 +117,13 @@ public class ListFragment extends Fragment
 						}
 
 						_item.setSelected(cb.isChecked());
+						// gray out text
+						if (_item.isSelected())
+						{
+							finalHolder.checkBox.setTextColor(Color.rgb(220, 220, 220));
+						}
+						else
+							finalHolder.checkBox.setTextColor(Color.BLACK);
 					}
 				});
 
