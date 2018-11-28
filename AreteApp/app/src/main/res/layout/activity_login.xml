@@ -7,7 +7,7 @@
     tools:context=".LoginActivity">
 
     <TextView
-        android:id="@+id/textWelcom"
+        android:id="@+id/textWelcome"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -29,7 +29,7 @@
         android:id="@+id/editTextLogin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textWelcom"
+        android:layout_alignStart="@+id/textWelcome"
         android:layout_alignParentTop="true"
         android:layout_marginTop="158dp"
         android:ems="10"
@@ -43,7 +43,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/textWelcom"
+        android:layout_alignStart="@+id/textWelcome"
         android:layout_alignParentTop="true"
         android:layout_marginTop="216dp"
         android:ems="10"
@@ -80,14 +80,14 @@
         android:textColor="@color/colorPrimary"
         />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editTextPassword"
-        android:layout_marginStart="-93dp"
-        android:layout_marginTop="-262dp"
-        android:layout_toEndOf="@+id/buttonCreateAccount"
-        android:src="@drawable/logo" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifLogo"
+        android:layout_width="211dp"
+        android:layout_height="111dp"
+        android:layout_alignStart="@+id/textWelcome"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="97dp"
+        android:layout_marginTop="27dp"
+        android:src="@drawable/giphy" />
 
 </RelativeLayout>

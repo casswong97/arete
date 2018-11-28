@@ -278,9 +278,6 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 							}
 						}
 					}, 1000);
-
-
-
 				}
 			}
 		});

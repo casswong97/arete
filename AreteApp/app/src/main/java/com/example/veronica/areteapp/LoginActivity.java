@@ -17,6 +17,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.io.IOError;
+import java.io.IOException;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
 public class LoginActivity extends Activity implements Button.OnClickListener {
 
     private Button buttonLogin, buttonCreateAccount;
@@ -24,6 +30,8 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = "TAG";
+    private GifImageView mGigImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -31,7 +39,18 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
+        mGigImageView = (GifImageView) findViewById(R.id.gifLogo);
+		GifDrawable gifDrawable = null;
+		try {
+			gifDrawable = new GifDrawable(getResources(), R.drawable.giphy);
+			gifDrawable.setLoopCount(1);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mGigImageView.setImageDrawable(gifDrawable);
+
+
+		buttonLogin = (Button) findViewById(R.id.buttonLogin);
         buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
 
         editTextLogin = findViewById(R.id.editTextLogin);
