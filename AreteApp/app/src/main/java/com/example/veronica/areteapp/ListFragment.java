@@ -190,6 +190,11 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				holder.checkBox.setVisibility(View.INVISIBLE);
 			}
 
+			if (item.isSelected())
+			{
+				holder.checkBox.setTextColor(Color.rgb(220, 220, 220));
+			}
+
 			return convertView;
 		}
 
@@ -266,8 +271,11 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 						@Override
 						public void run()
 						{
-							convertView.setLayoutParams(new AbsListView.LayoutParams(-1,1));
-							holder.checkBox.setVisibility(View.INVISIBLE);
+							if (!switchShowCompletedTasks.isChecked())
+							{
+								convertView.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
+								holder.checkBox.setVisibility(View.INVISIBLE);
+							}
 						}
 					}, 1000);
 
