@@ -1,125 +1,128 @@
 package com.example.veronica.areteapp;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ListFragment extends Fragment
 {
-    ArrayAdapter<String> mTaskAdapter;
-    Button checkTaskButton;
 
-    public ListFragment() {
-        // Required empty public constructor
-    }
+	CustomListAdapter dataAdapter = null;
 
-    /**
-     *
-     * Found ToDo list code here:
-     * http://muggingsg.com/university/android-app-tutorial-todo-app-using-fragments/#2_Creating_a_List_of_Tasks
-     */
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
-        View rootview = inflater.inflate(R.layout.fragment_list, container, false);
+	public ListFragment() {
+		// Required empty public constructor
+	}
 
-        //Create the fake data
-        String[] fakeData = {
-                "Finish App",
-                "Groceries",
-                "Walk Dog",
-        };
-        List<String> tasks = new ArrayList<String>(Arrays.asList(fakeData));
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+	{
+		View rootview = inflater.inflate(R.layout.fragment_list, container, false);
+		super.onCreate(savedInstanceState);
+		//Generate list View from ArrayList
+		displayListView(rootview);
+		return rootview;
+	}
 
-        //Create the ArrayAdapter by specifying context, "how" (layout),"where" (textview), and " what" (data)
-        mTaskAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                R.layout.list_item_task,
-                R.id.list_item_task_textview,
-                tasks);
+	/**
+	 * Displays the ListItems in the list
+	 * @param rootview
+	 */
+	private void displayListView(View rootview)
+	{
+		//Array list of to-do items
+		ArrayList<ListItem> itemList = new ArrayList<ListItem>();
+		ListItem _items = new ListItem("Finish App",false);
+		itemList.add(_items);
+		_items = new ListItem("Groceries",false);
+		itemList.add(_items);
+		_items = new ListItem("Walk Dog",false);
+		itemList.add(_items);
+		//create an ArrayAdaptar from the String Array
+		dataAdapter = new CustomListAdapter(getActivity(), R.layout.list_item_task, itemList);
+		ListView listView = (ListView) rootview.findViewById(R.id.listViewTask);
+		// Assign adapter to ListView
+		listView.setAdapter(dataAdapter);
+	}
 
-        //Still need to bind adapter to the ListView
-        ListView listView = (ListView) rootview.findViewById(R.id.listViewTask);
-        listView.setAdapter(mTaskAdapter);
+	/**
+	 * Custom Adapter to know when check box clicked
+	 */
+	private class CustomListAdapter extends ArrayAdapter<ListItem>
+	{
+		private ArrayList<ListItem> itemList;
 
-        // Inflate the layout for this fragment
-        return rootview;
-    }
+		public CustomListAdapter(Context context, int textViewResourceId, ArrayList<ListItem> stateList)
+		{
+			super(context, textViewResourceId, stateList);
+			this.itemList = new ArrayList<ListItem>();
+			this.itemList.addAll(stateList);
+		}
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
+		private class ViewHolder
+		{
+			TextView text;
+			CheckBox checkBox;
+		}
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
-    {
-        inflater.inflate(R.menu.tasks_fragment, menu);
-    }
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent)
+		{
+			ViewHolder holder = null;
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        switch (id){
-            case R.id.action_add_task:
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Add a task");
-                builder.setMessage("What do you want to do?");
-                final EditText inputField = new EditText(getActivity());
-                builder.setView(inputField);
-                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface di, int i) {
-                        Toast.makeText(getActivity(), inputField.getText(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-                builder.setNegativeButton("Cancel", null);
-                builder.create().show();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+			Log.v("ConvertView", String.valueOf(position));
 
+			if (convertView == null)
+			{
+				LayoutInflater vi = (LayoutInflater)getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//                Toast.makeText(getActivity(), "HELLO", Toast.LENGTH_LONG).show();
-//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//                builder.setTitle("Hooray! You completed a goal");
-//                builder.setMessage("Do you want to add a reflection about this goal?");
-//                final EditText inputField = new EditText(getActivity());
-//                builder.setView(inputField);
-//                builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface di, int i) {
-//                        Toast.makeText(getActivity(), inputField.getText(), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//                builder.setNegativeButton("Cancel", null);
-//                builder.create().show();
+				convertView = vi.inflate(R.layout.list_item_task, null);
+
+				holder = new ViewHolder();
+				holder.text = (TextView) convertView.findViewById(R.id.list_item_task_textview);
+				holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkTaskButton);
+
+				convertView.setTag(holder);
+
+				holder.checkBox.setOnClickListener( new View.OnClickListener()
+				{
+					public void onClick(View v)
+					{
+						CheckBox cb = (CheckBox) v;
+						ListItem _item = (ListItem) cb.getTag();
+
+						Toast.makeText(getActivity(), "Clicked on Checkbox: " + cb.getText() + " is " + cb.isChecked(),
+								Toast.LENGTH_LONG).show();
+
+						_item.setSelected(cb.isChecked());
+					}
+				});
+
+			}
+			else
+			{
+				holder = (ViewHolder) convertView.getTag();
+			}
+
+			ListItem item = itemList.get(position);
+			holder.checkBox.setText(item.getText());
+			holder.checkBox.setChecked(item.isSelected());
+			holder.checkBox.setTag(item);
+
+			return convertView;
+		}
+
+	}
 
 }
