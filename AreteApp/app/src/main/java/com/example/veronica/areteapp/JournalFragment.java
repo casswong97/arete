@@ -50,46 +50,23 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         // Required empty public constructor
     }
 
-    /**
-     *
-     * Found ToDo list code here:
-     * http://muggingsg.com/university/android-app-tutorial-todo-app-using-fragments/#2_Creating_a_List_of_Tasks
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_journal, container, false);
+
         // Retrieve UI Elements
         eT_Date = rootview.findViewById(R.id.tV_Date);
         bT_Submit = rootview.findViewById(R.id.bt_Submit);
         bT_Submit.setOnClickListener(this);
+
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
 
-        // Set today's date
+        // Set date of page
         setDate();
 
-        // Set up Recycler Adapter/View
-
-
-//
-//        //Create the fake data
-//        String[] fakeData = {
-//                "Finish App",
-//                "Groceries",
-//                "Walk Dog",
-//        };
-//        List<String> tasks = new ArrayList<String>(Arrays.asList(fakeData));
-//
-//        //Create the ArrayAdapter by specifying context, "how" (layout),"where" (textview), and " what" (data)
-//        mTaskAdapter = new ArrayAdapter<String>(
-//                getActivity(),
-//                R.layout.list_item_task,
-//                R.id.list_item_task_textview,
-//                tasks);
-//
-//        //Still need to bind adapter to the ListView
-//        ListView listView = (ListView) rootview.findViewById(R.id.listViewTask);
-//        listView.setAdapter(mTaskAdapter);
+        // Set up Goals UI
+        setGoalView();
 
         // Inflate the layout for this fragment
         return rootview;
@@ -98,7 +75,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.buttonSubmit:
+            case R.id.bt_Submit:
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
         }
     }
@@ -108,6 +85,14 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", new java.util.Date()));
     }
 
+    private void setGoalView() {
+        // Set up Recycler Adapter/View for Goals List
+        // Retrieve Goals
+        initGoals();
+        // Inflate Recycler View
+        initRecyclerView();
+    }
+
     private void initRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(goals, getActivity());
@@ -115,50 +100,50 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-//    private void initGoals() {
-//        String email = getEmail();
-//        if (!TextUtils.isEmpty(email)) {
-//            String calendarKey = getCKey(email);
-//        }
-//    }
-//
-//    private String getEmail() {
-//        String email;
-//        // get user email
-//        FirebaseUser user = mAuth.getCurrentUser();
-//        if (user != null) {
-//            email = EncodeString(user.getEmail());
-//        } else {
-//            email = null;
-//        }
-//        return email;
-//    }
-//
-//    private String getCKey(String email) {
-//        getDBVal("Users", email, "calendarKey");
-//        goals = new ArrayList<>();
-//        return null;
-//    }
-//
-//    private void getDBVal(String table, String ref, String key) {
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference tableRef = database.getReference(table);
-//        DatabaseReference keyRef = tableRef.child(ref).child(key);
-//        keyRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.exists()) {
-//                    String cKey = dataSnapshot.getValue(String.class);
-//                } else {
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                // Failed to read value
-//                Log.w(TAG, "Failed to read value.", databaseError.toException());
-//            }
-//        });
-//    }
+    private void initGoals() {
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            retrieveGoals(email);
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to populate goal list");
+        }
+    }
+
+    private String getEmail() {
+        String email;
+        // get user email
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            email = EncodeString(user.getEmail());
+        } else {
+            email = null;
+        }
+        return email;
+    }
+
+    private void retrieveGoals(String email) {
+        // Initialize goals list
+        goals = new ArrayList<>();
+
+        // Retrieve goals from DB
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Goals");
+        goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Add goals to goals list
+                for (DataSnapshot goalSnapshot : dataSnapshot.getChildren()) {
+                    Goals goal = goalSnapshot.getValue(Goals.class);
+                    goals.add(goal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
 }

@@ -40,6 +40,7 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
         editTextLogin = findViewById(R.id.editTextLogin);
         editTextPassword = findViewById(R.id.editTextPassword);
+
         // Set listeners for buttons
         buttonLogin.setOnClickListener(this);
         buttonCreateAccount.setOnClickListener(this);

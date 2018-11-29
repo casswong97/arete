@@ -11,6 +11,7 @@ public class DayReflection {
     public DayReflection(int qualityDay, String reflection) {
         this.status = qualityDay;
         this.dayReflection = reflection;
+
     }
 
     public int getStatus() {

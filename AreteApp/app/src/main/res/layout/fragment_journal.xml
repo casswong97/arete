@@ -23,8 +23,7 @@
             android:layout_marginTop="11dp"
             android:textSize="24sp"
             tools:text="Today's Date"
-            android:textStyle="bold"
-            app:fontFamily="Perpetua Titling MT"/>
+            android:textStyle="bold" />
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -47,8 +46,7 @@
             android:background="@color/colorPrimaryDark"
             android:text="Complete Reflection"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/colorPrimary"
-            app:fontFamily="Perpetua Titling MT" />
+            android:textColor="@color/colorPrimary"/>
 
         <CheckBox
             android:id="@+id/checkBoxDailyExercise"
@@ -62,8 +60,7 @@
             android:layout_marginTop="51dp"
             android:text="Daily Exercise"
             android:textSize="14sp"
-            android:textStyle="italic"
-            app:fontFamily="@font/Perpetua Titling MT" />
+            android:textStyle="italic" />
 
         <EditText
             android:id="@+id/eT_DE"
@@ -78,8 +75,7 @@
             android:ems="10"
             android:hint="Exercise Answer"
             android:inputType="textMultiLine"
-            android:textSize="14sp"
-            app:fontFamily="Perpetua Titling MT" />
+            android:textSize="14sp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"

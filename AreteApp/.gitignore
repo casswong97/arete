@@ -1,0 +1,8 @@
+.idea
+*.iml
+.gradle
+.DS_Store
+local.properties
+build
+captures
+".gitignore" 13L, 190C
