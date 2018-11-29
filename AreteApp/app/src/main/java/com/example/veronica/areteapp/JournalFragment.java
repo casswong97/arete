@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
     private TextView eT_Date;
     private Button bT_Submit;
     private ArrayList<Goals> goals;
+    private EditText eT_Day_Reflection_answer;
+    private RatingBar ratingBar_Status;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
 
@@ -56,8 +59,11 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 
         // Retrieve UI Elements
         eT_Date = rootview.findViewById(R.id.tV_Date);
+        eT_Day_Reflection_answer = rootview.findViewById(R.id.eT_Day_Reflection_Answer);
         bT_Submit = rootview.findViewById(R.id.bt_Submit);
         bT_Submit.setOnClickListener(this);
+        ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
+        ratingBar_Status.setOnClickListener(this);
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
@@ -77,7 +83,39 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         switch (v.getId()) {
             case R.id.bt_Submit:
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
+
         }
+    }
+
+    private void updateDayReflectionDB() {
+        // Get email of User
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            int stars = ratingBar_Status.getNumStars();
+            String dayReflection = eT_Day_Reflection_answer.getText().toString();
+            setDBDayReflection(email, new DayReflection(stars, dayReflection));
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
+        }
+    }
+
+    private void setDBDayReflection(String email, final DayReflection reflection) {
+        // Retrieve goals from DB
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        final DatabaseReference dayReflectionRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Reflection");
+        dayReflectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dayReflectionRef.setValue(reflection);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
     }
 
     private void setDate() {
