@@ -2319,6 +2319,7 @@
     <string name="default_web_client_id" translatable="false">1040322646983-ubrjc1d93dkhes6gmk2hd9mcpsn8p8tp.apps.googleusercontent.com</string>
     <string name="fab_transformation_scrim_behavior" translatable="false">android.support.design.transformation.FabTransformationScrimBehavior</string>
     <string name="fab_transformation_sheet_behavior" translatable="false">android.support.design.transformation.FabTransformationSheetBehavior</string>
+    <string name="fcm_fallback_notification_channel_label">Miscellaneous</string>
     <string name="firebase_database_url" translatable="false">https://areteapp-d6572.firebaseio.com</string>
     <string name="gcm_defaultSenderId" translatable="false">1040322646983</string>
     <string name="google_api_key" translatable="false">AIzaSyDy0fqUmsW-O_Pys2sG6FVGhksWW71ac2s</string>

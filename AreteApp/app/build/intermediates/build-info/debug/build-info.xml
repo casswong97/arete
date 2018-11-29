@@ -6,7 +6,7 @@
     density="420dpi"
     format="10"
     plugin-version="3.2.1"
-    timestamp="1543344924435"
+    timestamp="1543470459607"
     token="3928844200596656798"
     verifier="FULL_BUILD_REQUESTED" >
 
@@ -65,7 +65,7 @@
 
     <build
         build-mode="FULL"
-        timestamp="1543344924435"
+        timestamp="1543470459607"
         verifier="FULL_BUILD_REQUESTED" >
         <artifact
             location="/Users/cass/Desktop/arete/AreteApp/app/build/intermediates/split-apk/debug/slices/slice_7.apk"
