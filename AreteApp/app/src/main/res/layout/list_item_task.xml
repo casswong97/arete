@@ -31,7 +31,8 @@
         android:layout_alignBottom="@id/checkTaskButton"
         android:layout_toRightOf="@id/checkTaskButton"
         android:layout_toEndOf="@id/checkTaskButton"
-        android:textAppearance="?android:textAppearanceLarge" />
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textSize="18sp"/>
 
 
 </RelativeLayout>

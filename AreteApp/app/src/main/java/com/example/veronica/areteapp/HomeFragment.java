@@ -1,6 +1,7 @@
 package com.example.veronica.areteapp;
 
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
         editTextAnswer = (EditText) rootview.findViewById(R.id.editTextAnswer);
         buttonEdit = (ImageButton) rootview.findViewById(R.id.buttonEdit);
         buttonEdit.setOnClickListener(this);
+
 
         setGreeting();
 
