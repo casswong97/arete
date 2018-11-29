@@ -72,7 +72,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         setDate();
 
         // Set up Goals UI
-        setGoalView();
+        setGoalView(rootview);
 
         // Inflate the layout for this fragment
         return rootview;
@@ -123,16 +123,16 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", new java.util.Date()));
     }
 
-    private void setGoalView() {
+    private void setGoalView(View view) {
         // Set up Recycler Adapter/View for Goals List
         // Retrieve Goals
         initGoals();
         // Inflate Recycler View
-        initRecyclerView();
+        initRecyclerView(view);
     }
 
-    private void initRecyclerView() {
-        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+    private void initRecyclerView(View view) {
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(goals, getActivity());
         recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
