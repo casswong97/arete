@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
@@ -19,7 +21,7 @@ import android.support.annotation.NonNull;
  */
 public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener
 {
-    CalendarView calendarView;
+    private CalendarView calendarView;
 	private BottomNavigationView mMainNav;
 
     public CalendarFragment() {
@@ -32,9 +34,12 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
                              Bundle savedInstanceState)
     {
         View rootview = inflater.inflate(R.layout.fragment_calendar, container, false);
+
+        mMainNav = getActivity().findViewById(R.id.mainNav);
         calendarView = rootview.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(this);
-        // Inflate the layout for this fragment
+
+		// Inflate the layout for this fragment
 
 		return rootview;
     }
@@ -42,8 +47,9 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
     {
-        AppCompatActivity activity = (AppCompatActivity) view.getContext();
-        Fragment myFragment = new JournalFragment(year, month, dayOfMonth);
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+		AppCompatActivity activity = (AppCompatActivity) view.getContext();
+		Fragment myFragment = new JournalFragment(year, month, dayOfMonth);
+		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
     }
 }
