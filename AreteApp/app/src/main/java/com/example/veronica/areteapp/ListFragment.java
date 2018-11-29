@@ -33,7 +33,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	ArrayList<ListItem> itemList;
 	CompoundButton switchShowCompletedTasks;
 	TextView textViewCompleted;
-	int totalCompleted;
+	int totalCompleted = 0;
 
 	public ListFragment() {
 		// Required empty public constructor
@@ -146,6 +146,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				convertView.setTag(holder);
 				final ViewHolder finalHolder = holder;
 				final View finalConvertView = convertView;
+				final ViewHolder finalHolder1 = holder;
+				final View finalConvertView1 = convertView;
 				holder.checkBox.setOnClickListener(new View.OnClickListener()
 				{
 					public void onClick(View v)
@@ -157,8 +159,9 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 						// gray out text
 						if (_item.isSelected())
 						{
-							buildAlertDiaglogBox("Nice Work!", "Would you like to reflect on completing this task?", "Done", finalHolder, finalConvertView);
+							buildAlertDiaglogBox("Nice Work!", "Would you like to reflect on completing this task?", "Done");
 							_item.setVisible(false);
+							completedGoal(finalHolder1, finalConvertView1);
 						}
 						else
 						{
@@ -220,7 +223,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		switch (id){
 			case R.id.action_add_task:
 
-				buildAlertDiaglogBox("Add a task", "What do you want to accomplish?", "Add", null, null);
+				buildAlertDiaglogBox("Add a task", "What do you want to accomplish?", "Add");
 
 				return true;
 		}
@@ -233,10 +236,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	 * @param title
 	 * @param message
 	 * @param positiveButton
-	 * @param holder
-	 * @param convertView
 	 */
-	private void buildAlertDiaglogBox(final String title, String message, String positiveButton, final CustomListAdapter.ViewHolder holder, final View convertView)
+	private void buildAlertDiaglogBox(final String title, String message, String positiveButton)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(title);
@@ -258,31 +259,38 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				else if(title == "Nice Work!")
 				{
 					// add to journal entry
-
-
-					// gray out text
-					holder.checkBox.setTextColor(Color.rgb(220, 220, 220));
-					totalCompleted+=1;
-					String newCount = "Show " + Integer.toString(totalCompleted) + " Completed Tasks";
-					textViewCompleted.setText(newCount);
-					// wait
-					final Handler handler = new Handler();
-					handler.postDelayed(new Runnable() {
-						@Override
-						public void run()
-						{
-							if (!switchShowCompletedTasks.isChecked())
-							{
-								convertView.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
-								holder.checkBox.setVisibility(View.INVISIBLE);
-							}
-						}
-					}, 1000);
 				}
 			}
 		});
 		builder.setNegativeButton("Cancel", null);
 		builder.create().show();
+
+
 	}
 
+	/**
+	 *
+	 * @param holder
+	 * @param convertView
+	 */
+	private void completedGoal(final CustomListAdapter.ViewHolder holder, final View convertView)
+	{
+		holder.checkBox.setTextColor(Color.rgb(220, 220, 220));
+		totalCompleted+=1;
+		String newCount = "Show " + Integer.toString(totalCompleted) + " Completed Tasks";
+		textViewCompleted.setText(newCount);
+		// wait
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run()
+			{
+				if (!switchShowCompletedTasks.isChecked())
+				{
+					convertView.setLayoutParams(new AbsListView.LayoutParams(-1, 1));
+					holder.checkBox.setVisibility(View.INVISIBLE);
+				}
+			}
+		}, 1000);
+	}
 }

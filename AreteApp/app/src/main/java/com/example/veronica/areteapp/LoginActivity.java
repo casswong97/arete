@@ -40,14 +40,14 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         setContentView(R.layout.activity_login);
 
         mGifImageView = (GifImageView) findViewById(R.id.gifLogo);
-		GifDrawable gifDrawable = null;
-		try {
-			gifDrawable = new GifDrawable(getResources(), R.drawable.giphy);
-			gifDrawable.setLoopCount(1);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		mGifImageView.setImageDrawable(gifDrawable);
+//		GifDrawable gifDrawable = null;
+//		try {
+//			gifDrawable = new GifDrawable(getResources(), R.drawable.giphy);
+//			gifDrawable.setLoopCount(1);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		mGifImageView.setImageDrawable(gifDrawable);
 
 
 		buttonLogin = (Button) findViewById(R.id.buttonLogin);

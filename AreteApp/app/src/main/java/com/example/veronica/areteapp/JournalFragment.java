@@ -1,6 +1,7 @@
 package com.example.veronica.areteapp;
 
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -28,9 +30,23 @@ public class JournalFragment extends Fragment implements Button.OnClickListener
     private EditText editDate;
     ArrayAdapter<String> mTaskAdapter;
     private Button buttonSubmit;
+    private int year, month, dayOfMonth;
 
-    public JournalFragment() {
-        // Required empty public constructor
+    public JournalFragment()
+	{
+		// Required empty public constructor
+        Date date = new java.util.Date();
+        this.dayOfMonth = date.getDate();
+        this.year = date.getYear();
+        this.month = date.getMonth();
+	}
+
+    @SuppressLint("ValidFragment")
+    public JournalFragment(int year, int month, int dayOfMonth)
+	{
+        this.year = year;
+        this.month = month;
+        this.dayOfMonth = dayOfMonth;
     }
 
     /**
@@ -77,7 +93,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener
     private void setDate()
     {
         Calendar cal=Calendar.getInstance();
-        editDate.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", new java.util.Date()));
+		GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
+        editDate.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
     }
 
     @Override
