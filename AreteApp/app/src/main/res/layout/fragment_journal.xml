@@ -11,20 +11,18 @@
         android:layout_height="match_parent">
 
 
-        <EditText
-            android:id="@+id/editDate"
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/tV_Date"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="12dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginTop="13dp"
-            android:ems="10"
-            android:inputType="date"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="11dp"
+            android:textSize="24sp"
+            tools:text="Today's Date"
             android:textStyle="bold"
             app:fontFamily="Perpetua Titling MT"/>
 
@@ -35,17 +33,17 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginEnd="72dp"
-            android:layout_marginRight="72dp"
-            android:layout_marginBottom="79dp" />
+            android:layout_marginEnd="71dp"
+            android:layout_marginRight="71dp"
+            android:layout_marginBottom="50dp" />
 
         <Button
-            android:id="@+id/buttonSubmit"
+            android:id="@+id/bt_Submit"
             android:layout_width="147dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="17dp"
+            android:layout_marginBottom="7dp"
             android:background="@color/colorPrimaryDark"
             android:text="Complete Reflection"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -61,40 +59,75 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="13dp"
             android:layout_marginLeft="13dp"
-            android:layout_marginTop="84dp"
-            android:text="daily exercise"
-            android:textSize="18sp"
+            android:layout_marginTop="51dp"
+            android:text="Daily Exercise"
+            android:textSize="14sp"
             android:textStyle="italic"
-            app:fontFamily="Perpetua Titling MT" />
+            app:fontFamily="@font/Perpetua Titling MT" />
 
         <EditText
-            android:id="@+id/editTextDE"
-            android:layout_width="345dp"
+            android:id="@+id/eT_DE"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="125dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="108dp"
             android:ems="10"
-            android:inputType="text|textLongMessage"
+            android:hint="Exercise Answer"
+            android:inputType="textMultiLine"
+            android:textSize="14sp"
             app:fontFamily="Perpetua Titling MT" />
 
-        <ListView
-            android:id="@+id/listViewTask"
-            android:layout_width="352dp"
-            android:layout_height="189dp"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/tV_Date"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginBottom="173dp" />
+
+        <TextView
+            android:id="@+id/tV_Exercise_Entry"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginStart="14dp"
-            android:layout_marginLeft="14dp"
-            android:layout_marginTop="176dp"
-            android:layout_marginEnd="18dp"
-            android:layout_marginRight="18dp" />
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="88dp"
+            tools:text="Exercise Entry"
+            android:inputType="textMultiLine"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tV_Day_Reflection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginBottom="148dp"
+            android:text="Reflect On Your Day:"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/eT_Day_Reflection_Answer"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tV_Day_Reflection"
+            android:layout_alignStart="@+id/tV_Date"
+            android:layout_marginTop="-148dp"
+            android:ems="10"
+            android:hint="Reflection Answer"
+            android:inputType="textMultiLine"
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
