@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -27,7 +28,7 @@ import java.util.Locale;
  */
 public class JournalFragment extends Fragment implements Button.OnClickListener
 {
-    private EditText editDate;
+    private TextView viewDate;
     ArrayAdapter<String> mTaskAdapter;
     private Button buttonSubmit;
     private int year, month, dayOfMonth;
@@ -60,7 +61,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener
     {
         View rootview = inflater.inflate(R.layout.fragment_journal, container, false);
 
-        editDate = rootview.findViewById(R.id.editDate);
+        viewDate = rootview.findViewById(R.id.viewDate);
         setDate();
 
         buttonSubmit = rootview.findViewById(R.id.buttonSubmit);
@@ -94,7 +95,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener
     {
         Calendar cal=Calendar.getInstance();
 		GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
-        editDate.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
+        viewDate.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
     }
 
     @Override

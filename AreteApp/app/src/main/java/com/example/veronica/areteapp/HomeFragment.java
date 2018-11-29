@@ -22,7 +22,7 @@ import java.util.Date;
  */
 public class HomeFragment extends Fragment implements Button.OnClickListener
 {
-    private EditText editGreeting;
+    private TextView viewGreeting;
     private EditText editTextAnswer;
     private ImageButton buttonEdit;
 
@@ -36,7 +36,7 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
                              Bundle savedInstanceState)
     {
         View rootview = inflater.inflate(R.layout.fragment_home, container, false);
-        editGreeting = (EditText) rootview.findViewById(R.id.editGreeting);
+        viewGreeting = (TextView) rootview.findViewById(R.id.viewGreeting);
         editTextAnswer = (EditText) rootview.findViewById(R.id.editTextAnswer);
         buttonEdit = (ImageButton) rootview.findViewById(R.id.buttonEdit);
         buttonEdit.setOnClickListener(this);
@@ -57,22 +57,22 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
         if(timeOfDay >= 0 && timeOfDay < 12)
         {
             greeting = "Good Morning!";
-            editGreeting.setText(greeting);
+            viewGreeting.setText(greeting);
         }
         else if(timeOfDay >= 12 && timeOfDay < 16)
         {
             greeting = "Good Afternoon!";
-            editGreeting.setText(greeting);
+            viewGreeting.setText(greeting);
         }
         else if(timeOfDay >= 16 && timeOfDay < 21)
         {
             greeting = "Good Evening!";
-            editGreeting.setText(greeting);
+            viewGreeting.setText(greeting);
         }
         else if(timeOfDay >= 21 && timeOfDay < 24)
         {
             greeting = "Good Night!";
-            editGreeting.setText(greeting);
+            viewGreeting.setText(greeting);
         }
     }
 
