@@ -142,7 +142,7 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         });
 
     }
-    // Helper functions to work around firebase datapath rules
+    // Helper functions to work around Firebase Datapath rules
     public static String EncodeString(String string) {
         return string.replace(".", ",");
     }
