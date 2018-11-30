@@ -86,5 +86,3 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
         }
     }
 }
-
-

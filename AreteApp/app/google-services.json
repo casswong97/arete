@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "1040322646983-4qkc1lsfd51m7a06p3cr4iovppinvsn1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.veronica.areteapp",
+            "certificate_hash": "78db58f7f33189322fdbeb3b6a21b190a94ad4b2"
+          }
+        },
+        {
           "client_id": "1040322646983-ubrjc1d93dkhes6gmk2hd9mcpsn8p8tp.apps.googleusercontent.com",
           "client_type": 3
         }
