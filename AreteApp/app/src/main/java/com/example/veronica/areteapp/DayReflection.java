@@ -1,6 +1,7 @@
 package com.example.veronica.areteapp;
 
 public class DayReflection {
+
     int status;
     String dayReflection;
 

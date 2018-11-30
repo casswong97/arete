@@ -32,12 +32,12 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="173dp"
+            android:layout_marginTop="187dp"
             android:layout_marginEnd="112dp"
             android:layout_marginRight="112dp"
             android:ems="10"
-            android:hint="..."
-            android:inputType="text|textLongMessage"
+            android:hint=" ..."
+            android:inputType="textMultiLine"
             app:fontFamily="Perpetua Titling MT" />
 
         <ImageButton
@@ -47,25 +47,25 @@
             android:layout_alignTop="@+id/editTextAnswer"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="3dp"
-            android:layout_marginEnd="82dp"
-            android:layout_marginRight="82dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="63dp"
+            android:layout_marginRight="63dp"
             android:background="@drawable/baseline_border_color_black_24"
             android:src="@drawable/baseline_border_color_black_24" />
 
-        <EditText
-            android:id="@+id/editGreeting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
+            android:id="@+id/viewGreeting"
+            android:layout_width="205dp"
+            android:layout_height="43dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="57dp"
+            android:layout_marginTop="33dp"
             android:layout_marginEnd="96dp"
             android:layout_marginRight="96dp"
             android:ems="10"
-            android:inputType="text"
             android:singleLine="true" />
+
     </RelativeLayout>
 
 
