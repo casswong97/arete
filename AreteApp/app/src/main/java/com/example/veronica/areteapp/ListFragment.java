@@ -18,7 +18,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -37,14 +36,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 public class ListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener
 {
-
 	CustomListAdapter dataAdapter = null;
 	ListView listView;
-	ArrayList<ListItem> itemList;
+	ArrayList<Goals> goalList;
 	CompoundButton switchShowCompletedTasks;
 	TextView textViewCompleted;
 	int totalCompleted = 0;
@@ -86,7 +83,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	}
 
 	/**
-	 * Displays the ListItems in the list
+	 * Displays the Goalss in the list
 	 * @param rootview
 	 */
 	private void displayListView(View rootview)
@@ -94,23 +91,23 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		//Array list of to-do items
 
 		// junk data
-		itemList = new ArrayList<ListItem>();
+		goalList = new ArrayList<Goals>();
 		// Assign adapter to ListView
-		updateItemList();
-		getDBListItems();
+		updateGoalList();
+		getDBGoalList();
 	}
 
 	// setOneGoal
-	private void setDBListItem(final ListItem listItem) {
+	private void setDBGoalList(final Goals Goals) {
 		// Retrieve goals from DB
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference rootRef = database.getReference("Users");
 
-		final DatabaseReference goalListItemRef = rootRef.child(email).child("Calendar").child(todayDate).child("Goals").child(listItem.getText());
-		goalListItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+		final DatabaseReference goalGoalsRef = rootRef.child(email).child("Calendar").child(todayDate).child("Goals").child(Goals.getGoalName());
+		goalGoalsRef.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-				goalListItemRef.setValue(listItem);
+				goalGoalsRef.setValue(Goals);
 			}
 
 			@Override
@@ -122,7 +119,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	}
 
 	// get entire list
-	private void getDBListItems() {
+	private void getDBGoalList() {
 		// Retrieve goals from DB
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference rootRef = database.getReference("Users");
@@ -134,9 +131,9 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 			{
 				for (DataSnapshot goalSnapshot: dataSnapshot.getChildren())
 				{
-					ListItem item = goalSnapshot.getValue(ListItem.class);
-					itemList.add(item);
-					updateItemList();
+					Goals goal = goalSnapshot.getValue(Goals.class);
+					goalList.add(goal);
+					updateGoalList();
 				}
 			}
 
@@ -158,13 +155,13 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	{
 		// show Completed Tasks when Switch is ON
 		// show InCompleted Tasks when Switch if OFF
-		for(ListItem _item: itemList)
+		for(Goals _goal: goalList)
 		{
 			if(isChecked)
-				_item.setVisible(true);
+				_goal.setVisible(true);
 			else
-				if(_item.isSelected())
-					_item.setVisible(false);
+				if(_goal.getCompletion())
+					_goal.setVisible(false);
 		}
 		dataAdapter.notifyDataSetChanged();
 		listView.setAdapter(dataAdapter);
@@ -173,15 +170,15 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	/**
 	 * Custom Adapter to know when check box clicked
 	 */
-	private class CustomListAdapter extends ArrayAdapter<ListItem>
+	private class CustomListAdapter extends ArrayAdapter<Goals>
 	{
-		private ArrayList<ListItem> itemList;
+		private ArrayList<Goals> goalList;
 
-		public CustomListAdapter(Context context, int textViewResourceId, ArrayList<ListItem> itemList)
+		public CustomListAdapter(Context context, int textViewResourceId, ArrayList<Goals> goalList)
 		{
-			super(context, textViewResourceId, itemList);
-			this.itemList = new ArrayList<ListItem>();
-			this.itemList.addAll(itemList);
+			super(context, textViewResourceId, goalList);
+			this.goalList = new ArrayList<Goals>();
+			this.goalList.addAll(goalList);
 		}
 
 		private class ViewHolder
@@ -221,24 +218,25 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 					public void onClick(View v)
 					{
 						CheckBox cb = (CheckBox) v;
-						ListItem _item = (ListItem) cb.getTag();
+						Goals _goal = (Goals) cb.getTag();
 
-						_item.setSelected(cb.isChecked());
+						_goal.setCompletion(cb.isChecked());
 						// gray out text
-						if (_item.isSelected())
+						if (_goal.getCompletion())
 						{
-							buildAlertDiaglogBox("Nice Work!", "Would you like to reflect on completing this task?", "Done");
-							_item.setVisible(false);
+							buildAlertDiaglogBox("Nice Work!", "Would you like to reflect on completing this task?", "Done", _goal);
+							_goal.setVisible(false);
 							completedGoal(finalHolder1, finalConvertView1);
+							setDBGoalList(_goal);
 
 						}
 						else
 						{
 							finalHolder.checkBox.setTextColor(Color.BLACK);
-							_item.setVisible(true);
+							_goal.setVisible(true);
 							totalCompleted-=1;
 						}
-						setDBListItem(_item);
+						setDBGoalList(_goal);
 					}
 				});
 
@@ -248,22 +246,22 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			ListItem item = itemList.get(position);
-			holder.checkBox.setText(item.getText());
-			holder.checkBox.setChecked(item.isSelected());
-			holder.checkBox.setTag(item);
+			Goals goal = goalList.get(position);
+			holder.checkBox.setText(goal.getGoalName());
+			holder.checkBox.setChecked(goal.getCompletion());
+			holder.checkBox.setTag(goal);
 
-			if (item.isVisible())
+			if (goal.getVisible())
 			{
 				holder.checkBox.setVisibility(View.VISIBLE);
 			}
-			else if (!item.isVisible() && !switchShowCompletedTasks.isChecked())
+			else if (!goal.getVisible() && !switchShowCompletedTasks.isChecked())
 			{
 				convertView.setLayoutParams(new AbsListView.LayoutParams(-1,1));
 				holder.checkBox.setVisibility(View.INVISIBLE);
 			}
 
-			if (item.isSelected())
+			if (goal.getCompletion())
 			{
 				holder.checkBox.setTextColor(Color.rgb(220, 220, 220));
 			}
@@ -293,7 +291,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		switch (id){
 			case R.id.action_add_task:
 
-				buildAlertDiaglogBox("Add a task", "What do you want to accomplish?", "Add");
+				buildAlertDiaglogBox("Add a task", "What do you want to accomplish?", "Add", null);
 
 				return true;
 		}
@@ -307,7 +305,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	 * @param message
 	 * @param positiveButton
 	 */
-	private void buildAlertDiaglogBox(final String title, String message, String positiveButton)
+	private void buildAlertDiaglogBox(final String title, String message, String positiveButton, final Goals _goal)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 		builder.setTitle(title);
@@ -321,14 +319,15 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 			{
 				if (title == "Add a task")
 				{
-					ListItem item = new ListItem(inputField.getText().toString(), false, true);
-					itemList.add(item);
-					updateItemList();
-					setDBListItem(item);
+					Goals goal = new Goals(inputField.getText().toString(), false, "", true);
+					goalList.add(goal);
+					updateGoalList();
+					setDBGoalList(goal);
 				}
 				else if(title == "Nice Work!")
 				{
-					// add to journal entry
+					_goal.setGoalReflectionAnswer(inputField.getText().toString());
+					setDBGoalList(_goal);
 				}
 			}
 		});
@@ -364,9 +363,9 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		}, 1000);
 	}
 
-	private void updateItemList()
+	private void updateGoalList()
 	{
-		dataAdapter = new CustomListAdapter(getActivity(), R.layout.list_item_task, itemList);
+		dataAdapter = new CustomListAdapter(getActivity(), R.layout.list_item_task, goalList);
 		listView.setAdapter(dataAdapter);
 	}
 }
