@@ -63,6 +63,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		View rootview = inflater.inflate(R.layout.fragment_list, container, false);
 		super.onCreate(savedInstanceState);
 
+		listView = (ListView) rootview.findViewById(R.id.listViewTask);
+
 		// Get Firebase Auth Object
 		mAuth = FirebaseAuth.getInstance();
 		FirebaseUser user = mAuth.getCurrentUser();
@@ -93,11 +95,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 
 		// junk data
 		itemList = new ArrayList<ListItem>();
-		//create an ArrayAdaptar from the String Array
-		updateItemList();
 		// Assign adapter to ListView
-		listView.setAdapter(dataAdapter);
-
+		updateItemList();
 		getDBListItems();
 	}
 
@@ -231,6 +230,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 							buildAlertDiaglogBox("Nice Work!", "Would you like to reflect on completing this task?", "Done");
 							_item.setVisible(false);
 							completedGoal(finalHolder1, finalConvertView1);
+
 						}
 						else
 						{
@@ -238,6 +238,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 							_item.setVisible(true);
 							totalCompleted-=1;
 						}
+						setDBListItem(_item);
 					}
 				});
 
