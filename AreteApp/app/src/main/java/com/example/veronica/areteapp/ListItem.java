@@ -2,9 +2,11 @@ package com.example.veronica.areteapp;
 
 public class ListItem
 {
-	String text = null;
+	String text = "";
 	boolean selected = false;
 	boolean visible = true;
+
+	public ListItem() {}
 
 	public ListItem(String text, boolean selected, boolean visible)
 	{

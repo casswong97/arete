@@ -3,7 +3,9 @@ package com.example.veronica.areteapp;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,13 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -61,7 +70,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener
     {
         View rootview = inflater.inflate(R.layout.fragment_journal, container, false);
 
-        viewDate = rootview.findViewById(R.id.viewDate);
+		viewDate = rootview.findViewById(R.id.viewDate);
         setDate();
 
         buttonSubmit = rootview.findViewById(R.id.buttonSubmit);
@@ -88,7 +97,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener
 
         // Inflate the layout for this fragment
         return rootview;
-
     }
 
     private void setDate()

@@ -180,5 +180,14 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                 });
 
     }
+
+    // Helper functions to work around Firebase Datapath rules
+    public static String EncodeString(String string) {
+        return string.replace(".", ",");
+    }
+
+    public static String DecodeString(String string) {
+        return string.replace(",", ".");
+    }
 }
 

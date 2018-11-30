@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +25,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener
 {
@@ -34,6 +48,10 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	CompoundButton switchShowCompletedTasks;
 	TextView textViewCompleted;
 	int totalCompleted = 0;
+	private FirebaseAuth mAuth;
+	private String TAG = "TAG";
+	private String email;
+	private String todayDate;
 
 	public ListFragment() {
 		// Required empty public constructor
@@ -44,6 +62,15 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	{
 		View rootview = inflater.inflate(R.layout.fragment_list, container, false);
 		super.onCreate(savedInstanceState);
+
+		// Get Firebase Auth Object
+		mAuth = FirebaseAuth.getInstance();
+		FirebaseUser user = mAuth.getCurrentUser();
+		this.email = LoginActivity.EncodeString(user.getEmail());
+
+		Date c = Calendar.getInstance().getTime();
+		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
+		this.todayDate = df.format(c);
 
 		totalCompleted = 0;
 		switchShowCompletedTasks = (CompoundButton) rootview.findViewById(R.id.switchShowCompletedTasks);
@@ -66,18 +93,60 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 
 		// junk data
 		itemList = new ArrayList<ListItem>();
-		ListItem _items = new ListItem("Finish App",false, true);
-		itemList.add(_items);
-		_items = new ListItem("Groceries",false, true);
-		itemList.add(_items);
-		_items = new ListItem("Walk Dog",false, true);
-		itemList.add(_items);
-
 		//create an ArrayAdaptar from the String Array
-		dataAdapter = new CustomListAdapter(getActivity(), R.layout.list_item_task, itemList);
-		listView = (ListView) rootview.findViewById(R.id.listViewTask);
+		updateItemList();
 		// Assign adapter to ListView
 		listView.setAdapter(dataAdapter);
+
+		getDBListItems();
+	}
+
+	// setOneGoal
+	private void setDBListItem(final ListItem listItem) {
+		// Retrieve goals from DB
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference rootRef = database.getReference("Users");
+
+		final DatabaseReference goalListItemRef = rootRef.child(email).child("Calendar").child(todayDate).child("Goals").child(listItem.getText());
+		goalListItemRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+				goalListItemRef.setValue(listItem);
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				// Failed to read value
+				Log.w(TAG, "Failed to read value.", databaseError.toException());
+			}
+		});
+	}
+
+	// get entire list
+	private void getDBListItems() {
+		// Retrieve goals from DB
+		FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference rootRef = database.getReference("Users");
+
+		final DatabaseReference goalListRef = rootRef.child(email).child("Calendar").child(todayDate).child("Goals");
+		goalListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+			{
+				for (DataSnapshot goalSnapshot: dataSnapshot.getChildren())
+				{
+					ListItem item = goalSnapshot.getValue(ListItem.class);
+					itemList.add(item);
+					updateItemList();
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				// Failed to read value
+				Log.w(TAG, "Failed to read value.", databaseError.toException());
+			}
+		});
 	}
 
 	/**
@@ -253,8 +322,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				{
 					ListItem item = new ListItem(inputField.getText().toString(), false, true);
 					itemList.add(item);
-					dataAdapter = new CustomListAdapter(getActivity(), R.layout.list_item_task, itemList);
-					listView.setAdapter(dataAdapter);
+					updateItemList();
+					setDBListItem(item);
 				}
 				else if(title == "Nice Work!")
 				{
@@ -292,5 +361,11 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				}
 			}
 		}, 1000);
+	}
+
+	private void updateItemList()
+	{
+		dataAdapter = new CustomListAdapter(getActivity(), R.layout.list_item_task, itemList);
+		listView.setAdapter(dataAdapter);
 	}
 }
