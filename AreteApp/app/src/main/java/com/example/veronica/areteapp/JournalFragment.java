@@ -44,7 +44,6 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
  */
 public class JournalFragment extends Fragment implements Button.OnClickListener {
     private TextView tV_Date;
-    private EditText eT_Date;
     private Button bT_Submit;
     private ArrayList<Goals> goals;
     private EditText eT_Day_Reflection_answer;
@@ -78,7 +77,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         setDate();
 
         // Retrieve UI Elements
-		eT_Date = rootview.findViewById(R.id.eT_DE);
         eT_Day_Reflection_answer = rootview.findViewById(R.id.eT_Day_Reflection_Answer);
         bT_Submit = rootview.findViewById(R.id.bt_Submit);
         bT_Submit.setOnClickListener(this);
@@ -103,7 +101,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         switch (v.getId()) {
             case R.id.bt_Submit:
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
-
         }
     }
 
@@ -141,9 +138,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
     private void setDate() {
         Calendar cal=Calendar.getInstance();
 		GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
-		//TODO
-//        vT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
-        eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
+		tV_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
 
     }
 
