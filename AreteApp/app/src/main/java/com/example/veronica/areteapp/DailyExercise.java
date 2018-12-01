@@ -1,17 +1,21 @@
 package com.example.veronica.areteapp;
 
 public class DailyExercise {
-    String dailyExercise;
+    String dailyExerciseAnswer;
 
-    public DailyExercise(String dailyExercise) {
-        this.dailyExercise = dailyExercise;
+    public DailyExercise() {
+        // Default Constructor
     }
 
-    public String getDailyExercise() {
-        return dailyExercise;
+    public DailyExercise(String dailyExerciseAnswer) {
+        this.dailyExerciseAnswer = dailyExerciseAnswer;
     }
 
-    public void setDailyExercise(String dailyExercise) {
-        this.dailyExercise = dailyExercise;
+    public String getDailyExerciseAnswer() {
+        return dailyExerciseAnswer;
+    }
+
+    public void setDailyExerciseAnswer(String dailyExerciseAnswer) {
+        this.dailyExerciseAnswer = dailyExerciseAnswer;
     }
 }
