@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +27,11 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
     private EditText editTextAnswer;
     private ImageButton buttonEdit;
 
+    private ImageView imgMorning, imgAfternoon, imgEvening, imgNight;
+
     public HomeFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,8 +41,13 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
         viewGreeting = (TextView) rootview.findViewById(R.id.viewGreeting);
         editTextAnswer = (EditText) rootview.findViewById(R.id.editTextAnswer);
         buttonEdit = (ImageButton) rootview.findViewById(R.id.buttonEdit);
-        buttonEdit.setOnClickListener(this);
 
+        imgMorning = (ImageView) rootview.findViewById(R.id.morning_icon);
+        imgAfternoon = (ImageView) rootview.findViewById(R.id.afternoon_icon);
+        imgEvening = (ImageView) rootview.findViewById(R.id.evening_icon);
+        imgNight = (ImageView) rootview.findViewById(R.id.night_icon);
+
+        buttonEdit.setOnClickListener(this);
 
         setGreeting();
 
@@ -54,25 +61,29 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
         String greeting = "";
 
-        if(timeOfDay >= 0 && timeOfDay < 12)
+        if(timeOfDay >= 6 && timeOfDay < 12)
         {
             greeting = "Good Morning!";
             viewGreeting.setText(greeting);
+            imgMorning.setVisibility(View.VISIBLE);
         }
-        else if(timeOfDay >= 12 && timeOfDay < 16)
+        else if(timeOfDay >= 12 && timeOfDay < 17)
         {
             greeting = "Good Afternoon!";
             viewGreeting.setText(greeting);
+            imgAfternoon.setVisibility(View.VISIBLE);
         }
-        else if(timeOfDay >= 16 && timeOfDay < 21)
+        else if(timeOfDay >= 17 && timeOfDay < 20)
         {
             greeting = "Good Evening!";
             viewGreeting.setText(greeting);
+            imgEvening.setVisibility(View.VISIBLE);
         }
-        else if(timeOfDay >= 21 && timeOfDay < 24)
+        else if((timeOfDay >= 20 && timeOfDay < 24) || (timeOfDay >= 0 && timeOfDay < 6))
         {
             greeting = "Good Night!";
             viewGreeting.setText(greeting);
+            imgNight.setVisibility(View.VISIBLE);
         }
     }
 

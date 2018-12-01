@@ -15,7 +15,7 @@
         android:layout_marginTop="69dp"
         android:text="Arete"
         android:textAllCaps="true"
-        android:textSize="30sp"
+        android:textSize="35sp"
         android:typeface="normal"
         app:fontFamily="Perpetua Titling MT"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textWelcome"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="158dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="164dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -45,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textWelcome"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="216dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="234dp"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -60,11 +62,11 @@
         android:layout_below="@+id/editTextPassword"
         android:layout_alignParentStart="true"
         android:layout_marginStart="136dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="46dp"
         android:background="@color/colorPrimaryDark"
         android:text="Login"
-        app:fontFamily="Perpetua Titling MT"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        app:fontFamily="Perpetua Titling MT" />
 
     <Button
         android:id="@+id/buttonCreateAccount"
@@ -73,21 +75,21 @@
         android:layout_below="@+id/editTextPassword"
         android:layout_alignParentStart="true"
         android:layout_marginStart="109dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="110dp"
         android:background="@color/colorPrimaryDark"
         android:text="Create Account"
-        app:fontFamily="Perpetua Titling MT"
         android:textColor="@color/colorPrimary"
-        />
+        app:fontFamily="Perpetua Titling MT" />
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/gifLogo"
-        android:layout_width="211dp"
-        android:layout_height="111dp"
+        android:layout_width="182dp"
+        android:layout_height="121dp"
         android:layout_alignStart="@+id/textWelcome"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="97dp"
+        android:layout_marginStart="121dp"
         android:layout_marginTop="27dp"
-        android:src="@drawable/giphy" />
+        android:src="@drawable/logo_gif"
+        tools:targetApi="?android:attr/colorBackground" />
 
 </RelativeLayout>
