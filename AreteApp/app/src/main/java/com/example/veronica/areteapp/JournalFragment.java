@@ -53,6 +53,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         // Required empty public constructor
     }
 
+    // TODO: Instance where there's no goals, display a message, currently empty page
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.fragment_journal, container, false);

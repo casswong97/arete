@@ -121,27 +121,26 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
     }
 
     public void createUserIdEntry(final User user) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userTableRef = database.getReference("Users");
-        final DatabaseReference userRef = userTableRef.child(user.getUserName());
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Toast.makeText(LoginActivity.this, user.getUserName() + " already exists!", Toast.LENGTH_SHORT).show();
-                } else {
-                    userRef.setValue(user);
-                    Toast.makeText(LoginActivity.this, user.getUserName() + " added to DB", Toast.LENGTH_SHORT).show();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference userTableRef = database.getReference("Users");
+            final DatabaseReference userRef = userTableRef.child(user.getUserName());
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Toast.makeText(LoginActivity.this, user.getUserName() + " already exists!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        userRef.setValue(user);
+                        Toast.makeText(LoginActivity.this, user.getUserName() + " added to DB", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", databaseError.toException());
+                }
+            });
     }
     // Helper functions to work around Firebase Datapath rules
     public static String EncodeString(String string) {
