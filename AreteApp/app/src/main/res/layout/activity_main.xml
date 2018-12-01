@@ -23,8 +23,5 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentLeft="true"
         app:menu="@menu/nav_items"/>
-    <!--android:layout_marginTop="455dp"-->
 
-    <!--android:layout_marginEnd="0dp"-->
-        <!--android:layout_marginRight="0dp"-->
 </RelativeLayout>

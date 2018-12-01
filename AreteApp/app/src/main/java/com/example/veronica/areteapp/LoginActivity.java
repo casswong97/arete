@@ -24,17 +24,35 @@ import com.google.firebase.database.ValueEventListener;
 
 import static android.support.constraint.Constraints.TAG;
 
+import java.io.IOError;
+import java.io.IOException;
+
+import pl.droidsonroids.gif.GifDrawable;
+import pl.droidsonroids.gif.GifImageView;
+
 public class LoginActivity extends Activity implements Button.OnClickListener {
 
     private Button buttonLogin, buttonCreateAccount;
     private EditText editTextLogin, editTextPassword;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
+    private GifImageView mGifImageView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        mGifImageView = (GifImageView) findViewById(R.id.gifLogo);
+//		GifDrawable gifDrawable = null;
+//		try {
+//			gifDrawable = new GifDrawable(getResources(), R.drawable.giphy);
+//			gifDrawable.setLoopCount(1);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		mGifImageView.setImageDrawable(gifDrawable);
+
         // Get UI objects
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
         buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);

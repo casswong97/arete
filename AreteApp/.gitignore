@@ -1,5 +1,6 @@
+.idea/misc.xml
 .idea
-.idea/
+.idea/*
 *.iml
 .gradle
 .DS_Store

@@ -2,12 +2,17 @@ package com.example.veronica.areteapp;
 
 
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CalendarView;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.support.annotation.NonNull;
 
@@ -16,7 +21,8 @@ import android.support.annotation.NonNull;
  */
 public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener
 {
-    CalendarView calendarView;
+    private CalendarView calendarView;
+	private BottomNavigationView mMainNav;
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -29,17 +35,21 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     {
         View rootview = inflater.inflate(R.layout.fragment_calendar, container, false);
 
+        mMainNav = getActivity().findViewById(R.id.mainNav);
         calendarView = rootview.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(this);
-        // Inflate the layout for this fragment
-        return rootview;
+
+		// Inflate the layout for this fragment
+
+		return rootview;
     }
 
     @Override
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
     {
-        AppCompatActivity activity = (AppCompatActivity) view.getContext();
-        Fragment myFragment = new JournalFragment();
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+		AppCompatActivity activity = (AppCompatActivity) view.getContext();
+		Fragment myFragment = new JournalFragment(year, month, dayOfMonth);
+		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
     }
 }
