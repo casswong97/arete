@@ -89,7 +89,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="121dp"
         android:layout_marginTop="27dp"
-        android:src="@drawable/logo_gif"
-        tools:targetApi="?android:attr/colorBackground" />
+        android:src="@drawable/logo_gif" />
 
 </RelativeLayout>

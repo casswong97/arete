@@ -69,7 +69,7 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
 
         //create a new progress dialog
-        progressDialog = new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
     }
 
     @Override
