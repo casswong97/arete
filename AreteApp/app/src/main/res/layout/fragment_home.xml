@@ -18,23 +18,23 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="62dp"
-            android:layout_marginLeft="62dp"
-            android:layout_marginTop="121dp"
+            android:layout_marginStart="66dp"
+            android:layout_marginLeft="66dp"
+            android:layout_marginTop="173dp"
             android:text="I would feel great about today if..."
             android:textSize="18sp"
             app:fontFamily="Perpetua Titling MT" />
 
         <EditText
             android:id="@+id/editTextAnswer"
-            android:layout_width="203dp"
+            android:layout_width="294dp"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="187dp"
-            android:layout_marginEnd="112dp"
-            android:layout_marginRight="112dp"
+            android:layout_marginTop="213dp"
+            android:layout_marginEnd="58dp"
+            android:layout_marginRight="58dp"
             android:ems="10"
             android:hint=" ..."
             android:inputType="textMultiLine"
@@ -47,24 +47,90 @@
             android:layout_alignTop="@+id/editTextAnswer"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="63dp"
-            android:layout_marginRight="63dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="33dp"
+            android:layout_marginRight="33dp"
             android:background="@drawable/baseline_border_color_black_24"
             android:src="@drawable/baseline_border_color_black_24" />
 
         <TextView
             android:id="@+id/viewGreeting"
-            android:layout_width="205dp"
-            android:layout_height="43dp"
+            android:layout_width="267dp"
+            android:layout_height="42dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="33dp"
-            android:layout_marginEnd="96dp"
-            android:layout_marginRight="96dp"
+            android:layout_marginTop="81dp"
+            android:layout_marginEnd="46dp"
+            android:layout_marginRight="46dp"
             android:ems="10"
-            android:singleLine="true" />
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/mountainsBackground"
+            android:layout_width="match_parent"
+            android:layout_height="271dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/mountains_cropped" />
+
+        <ImageView
+            android:id="@+id/morning_icon"
+            android:layout_width="51dp"
+            android:layout_height="61dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="165dp"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="17dp"
+            android:src="@drawable/morning_icon"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/afternoon_icon"
+            android:layout_width="51dp"
+            android:layout_height="61dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="165dp"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="17dp"
+            android:src="@drawable/afternoon_icon"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/evening_icon"
+            android:layout_width="51dp"
+            android:layout_height="61dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="165dp"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="17dp"
+            android:src="@drawable/evening_icon"
+            android:visibility="invisible"/>
+
+        <ImageView
+            android:id="@+id/night_icon"
+            android:layout_width="51dp"
+            android:layout_height="61dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="165dp"
+            android:layout_marginLeft="165dp"
+            android:layout_marginTop="17dp"
+            android:src="@drawable/night_icon"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
 

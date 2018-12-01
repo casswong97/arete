@@ -16,6 +16,10 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 import android.support.annotation.NonNull;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -48,7 +52,9 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
     {
 		AppCompatActivity activity = (AppCompatActivity) view.getContext();
-		Fragment myFragment = new JournalFragment(year, month, dayOfMonth);
+
+		GregorianCalendar gcDate = new GregorianCalendar(year, month, dayOfMonth);
+		Fragment myFragment = new JournalFragment(gcDate);
 		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
 		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
     }

@@ -42,29 +42,38 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JournalFragment extends Fragment implements Button.OnClickListener {
-	private TextView eT_Date;
-	private Button bT_Submit;
-	private ArrayList<Goals> goals;
-	private EditText eT_Day_Reflection_answer;
-	private RatingBar ratingBar_Status;
-	private FirebaseAuth mAuth;
-	private String TAG = "TAG";
-	private int year, month, dayOfMonth;
 
-    public JournalFragment() {
+public class JournalFragment extends Fragment implements Button.OnClickListener  {
+    private TextView eT_Date;
+    private Button bT_Submit;
+    private ArrayList<Goals> goals;
+    private EditText eT_Day_Reflection_answer;
+    private EditText eT_Daily_Exercise;
+    private RatingBar ratingBar_Status;
+    private FirebaseAuth mAuth;
+    private String TAG = "TAG";
+	private GregorianCalendar gcDate;
+	private String dateKey;
+
+	public JournalFragment()
+	{
 		// Required empty public constructor
-		Date date = new java.util.Date();
-		this.dayOfMonth = date.getDate();
-		this.year = date.getYear();
-		this.month = date.getMonth();
+		this.gcDate = new GregorianCalendar();
+		getKeyFromGCDate(this.gcDate);
 	}
 
 	@SuppressLint("ValidFragment")
-	public JournalFragment(int year, int month, int dayOfMonth) {
-		this.year = year;
-		this.month = month;
-		this.dayOfMonth = dayOfMonth;
+	public JournalFragment(GregorianCalendar gcDate)
+	{
+		this.gcDate = gcDate;
+		getKeyFromGCDate(this.gcDate);
+	}
+
+	private void getKeyFromGCDate(GregorianCalendar gcDate)
+	{
+		Date date = gcDate.getTime();
+		SimpleDateFormat sF = new SimpleDateFormat("dd-MM-yyyy");
+		this.dateKey = sF.format(date.getTime());
 	}
     // TODO: Instance where there's no goals, display a message, currently empty page
 
@@ -75,6 +84,16 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         // Retrieve UI Elements
         eT_Date = rootview.findViewById(R.id.tV_Date);
         eT_Day_Reflection_answer = rootview.findViewById(R.id.eT_Day_Reflection_Answer);
+        eT_Daily_Exercise = rootview.findViewById(R.id.eT_DE);
+        eT_Daily_Exercise.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    updateDBDailyReflection();
+                    // code to execute when EditText loses focus
+                }
+            }
+        });
         bT_Submit = rootview.findViewById(R.id.bt_Submit);
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
@@ -93,14 +112,30 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         return rootview;
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_Submit:
+                updateDayReflectionDB();
+                updateDBDailyReflectionDB();
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
+
         }
     }
 
+    private void updateDayReflectionDB() {
+        // Get email of User
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            int stars = ratingBar_Status.getNumStars();
+            String dayReflection = eT_Day_Reflection_answer.getText().toString();
+            setDBDayReflection(email, new DayReflection(stars, dayReflection));
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
+        }
+    }
     private void updateDayReflectionDB() {
         // Get email of User
         String email = getEmail();
@@ -137,6 +172,9 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 		GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
         eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", new java.util.Date()));
     }
+	private void setDate() {
+		eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", gcDate));
+	}
 
     private void setGoalView(View view) {
         // Set up Recycler Adapter/View for Goals List
