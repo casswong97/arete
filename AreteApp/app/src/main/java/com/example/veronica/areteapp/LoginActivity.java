@@ -166,6 +166,7 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
+                    //TODO keep toast?
                     Toast.makeText(LoginActivity.this, user.getUserName() + " already exists!", Toast.LENGTH_SHORT).show();
                 } else {
                     userRef.setValue(user);
