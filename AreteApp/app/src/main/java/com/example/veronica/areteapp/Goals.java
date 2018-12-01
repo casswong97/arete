@@ -20,12 +20,10 @@ public class Goals {
     public String getGoalName() {
         return goalName;
     }
-    public void setGoalName(String goalName) {this.goalName = goalName;}
 
     public String getGoalReflectionAnswer() {
         return goalReflectionAnswer;
     }
-    public void setGoalReflectionAnswer (String goalName) {this.goalName = goalName;}
 
     public boolean getCompletion() {
         return completion;
@@ -36,11 +34,17 @@ public class Goals {
 		return this.visible;
 	}
 
+    public void setGoalName(String goalName)
+    {
+        this.goalName = goalName;
+    }
+
     public void setCompletion(boolean completion)
     {
         this.completion = completion;
     }
 
+    public void setGoalReflectionAnswer(String goalReflectionAnswer)
     {
         this.goalReflectionAnswer = goalReflectionAnswer;
     }
@@ -49,5 +53,4 @@ public class Goals {
     {
         this.visible = visible;
     }
-
 }
