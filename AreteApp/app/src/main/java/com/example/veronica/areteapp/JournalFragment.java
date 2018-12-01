@@ -42,14 +42,16 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JournalFragment extends Fragment implements Button.OnClickListener {
-	private TextView eT_Date;
-	private Button bT_Submit;
-	private ArrayList<Goals> goals;
-	private EditText eT_Day_Reflection_answer;
-	private RatingBar ratingBar_Status;
-	private FirebaseAuth mAuth;
-	private String TAG = "TAG";
+
+public class JournalFragment extends Fragment implements Button.OnClickListener  {
+    private TextView eT_Date;
+    private Button bT_Submit;
+    private ArrayList<Goals> goals;
+    private EditText eT_Day_Reflection_answer;
+    private EditText eT_Daily_Exercise;
+    private RatingBar ratingBar_Status;
+    private FirebaseAuth mAuth;
+    private String TAG = "TAG";
 	private GregorianCalendar gcDate;
 	private String dateKey;
 
@@ -74,134 +76,181 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 		this.dateKey = sF.format(date.getTime());
 	}
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View rootview = inflater.inflate(R.layout.fragment_journal, container, false);
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootview = inflater.inflate(R.layout.fragment_journal, container, false);
 
-		// Retrieve UI Elements
-		eT_Date = rootview.findViewById(R.id.tV_Date);
-		eT_Day_Reflection_answer = rootview.findViewById(R.id.eT_Day_Reflection_Answer);
-		bT_Submit = rootview.findViewById(R.id.bt_Submit);
-		bT_Submit.setOnClickListener(this);
-		ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
-		ratingBar_Status.setOnClickListener(this);
+        // Retrieve UI Elements
+        eT_Date = rootview.findViewById(R.id.tV_Date);
+        eT_Day_Reflection_answer = rootview.findViewById(R.id.eT_Day_Reflection_Answer);
+        eT_Daily_Exercise = rootview.findViewById(R.id.eT_DE);
+        eT_Daily_Exercise.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    updateDBDailyReflection();
+                    // code to execute when EditText loses focus
+                }
+            }
+        });
+        bT_Submit = rootview.findViewById(R.id.bt_Submit);
+        bT_Submit.setOnClickListener(this);
+        ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
+        ratingBar_Status.setOnClickListener(this);
 
-		// Get Firebase Auth Object
-		mAuth = FirebaseAuth.getInstance();
+        // Get Firebase Auth Object
+        mAuth = FirebaseAuth.getInstance();
 
-		// Set date of page
-		setDate();
+        // Set date of page
+        setDate();
 
-		// Set up Goals UI
-		setGoalView(rootview);
+        // Set up Goals UI
+        setGoalView();
 
-		// Inflate the layout for this fragment
-		return rootview;
-	}
+        // Inflate the layout for this fragment
+        return rootview;
+    }
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-			case R.id.bt_Submit:
-				Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
 
-		}
-	}
 
-	private void updateDayReflectionDB() {
-		// Get email of User
-		String email = getEmail();
-		if (!TextUtils.isEmpty(email)) {
-			int stars = ratingBar_Status.getNumStars();
-			String dayReflection = eT_Day_Reflection_answer.getText().toString();
-			setDBDayReflection(email, new DayReflection(stars, dayReflection));
-		} else {
-			Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
-		}
-	}
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.bt_Submit:
+                updateDayReflectionDB();
+                updateDayReflectionDB();
+                Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
 
-	private void setDBDayReflection(String email, final DayReflection reflection) {
-		// Retrieve goals from DB
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference rootRef = database.getReference("Users");
-		final DatabaseReference dayReflectionRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Reflection");
-		dayReflectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-			@Override
-			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-				dayReflectionRef.setValue(reflection);
-			}
+        }
+    }
 
-			@Override
-			public void onCancelled(@NonNull DatabaseError databaseError) {
-				// Failed to read value
-				Log.w(TAG, "Failed to read value.", databaseError.toException());
-			}
-		});
-	}
+
+
+    private void updateDayReflectionDB() {
+        // Get email of User
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            int stars = ratingBar_Status.getNumStars();
+            String dayReflection = eT_Day_Reflection_answer.getText().toString();
+            setDBDayReflection(email, new DayReflection(stars, dayReflection));
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
+        }
+    }
+
+    private void updateDBDailyReflection() {
+        // Get email of User
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            String dailyExercise = eT_Daily_Exercise.getText().toString();
+            setDBDailyExercise(email, new DailyExercise(dailyExercise));
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
+        }
+    }
+
+    private void setDBDailyExercise (String email, final DailyExercise dailyExercise) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        final DatabaseReference dailyExerciseRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Reflection");
+        dailyExerciseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dailyExerciseRef.setValue(dailyExercise);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
+
+
+
+    private void setDBDayReflection(String email, final DayReflection reflection) {
+        // Retrieve goals from DB
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        final DatabaseReference dayReflectionRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Reflection");
+        dayReflectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dayReflectionRef.setValue(reflection);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
 
 	private void setDate() {
 		eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", gcDate));
 	}
 
-	private void setGoalView(View view) {
-		// Set up Recycler Adapter/View for Goals List
-		// Retrieve Goals
-		initGoals();
-		// Inflate Recycler View
-		initRecyclerView(view);
-	}
+    private void setGoalView() {
+        // Set up Recycler Adapter/View for Goals List
+        // Retrieve Goals
+        initGoals();
+        // Inflate Recycler View
+        initRecyclerView();
+    }
 
-	private void initRecyclerView(View view) {
-		RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
-		RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(goals, getActivity());
-		recyclerView.setAdapter(recyclerViewAdapter);
-		recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-	}
+    private void initRecyclerView() {
+        RecyclerView recyclerView = (RecyclerView) getView().findViewById(R.id.recycler_view);
+        RecyclerViewAdapter recyclerViewAdapter = new RecyclerViewAdapter(goals, getActivity());
+        recyclerView.setAdapter(recyclerViewAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
 
-	private void initGoals() {
-		String email = getEmail();
-		if (!TextUtils.isEmpty(email)) {
-			retrieveGoals(email);
-		} else {
-			Log.w(TAG, email + " didn't exist, unable to populate goal list");
-		}
-	}
+    private void initGoals() {
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            retrieveGoals(email);
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to populate goal list");
+        }
+    }
 
-	private String getEmail() {
-		String email;
-		// get user email
-		FirebaseUser user = mAuth.getCurrentUser();
-		if (user != null) {
-			email = EncodeString(user.getEmail());
-		} else {
-			email = null;
-		}
-		return email;
-	}
+    private String getEmail() {
+        String email;
+        // get user email
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            email = EncodeString(user.getEmail());
+        } else {
+            email = null;
+        }
+        return email;
+    }
 
-	private void retrieveGoals(String email) {
-		// Initialize goals list
-		goals = new ArrayList<>();
+    private void retrieveGoals(String email) {
+        // Initialize goals list
+        goals = new ArrayList<>();
 
-		// Retrieve goals from DB
-		FirebaseDatabase database = FirebaseDatabase.getInstance();
-		DatabaseReference rootRef = database.getReference("Users");
-		DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Goals");
-		goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
-			@Override
-			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-				// Add goals to goals list
-				for (DataSnapshot goalSnapshot : dataSnapshot.getChildren()) {
-					Goals goal = goalSnapshot.getValue(Goals.class);
-					goals.add(goal);
-				}
-			}
+        // Retrieve goals from DB
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Goals");
+        goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // Add goals to goals list
+                for (DataSnapshot goalSnapshot : dataSnapshot.getChildren()) {
+                    Goals goal = goalSnapshot.getValue(Goals.class);
+                    goals.add(goal);
+                }
+            }
 
-			@Override
-			public void onCancelled(@NonNull DatabaseError databaseError) {
-				// Failed to read value
-				Log.w(TAG, "Failed to read value.", databaseError.toException());
-			}
-		});
-	}
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
 }
