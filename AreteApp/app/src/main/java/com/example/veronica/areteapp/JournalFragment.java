@@ -51,6 +51,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 	private FirebaseAuth mAuth;
 	private String TAG = "TAG";
 	private int year, month, dayOfMonth;
+	private GregorianCalendar date;
 
     public JournalFragment() {
 		// Required empty public constructor
@@ -82,6 +83,10 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
+
+        //TODO: Error HERE with Gregorian Calendar Object -> Can't format like in ListFragment
+        // Get date from Goal List
+        date = new GregorianCalendar(year, month, dayOfMonth);
 
         // Set date of page
         setDate();
@@ -117,7 +122,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         // Retrieve goals from DB
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference rootRef = database.getReference("Users");
-        final DatabaseReference dayReflectionRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Reflection");
+        final DatabaseReference dayReflectionRef = rootRef.child(email).child("Calendar").child(stringDateKey()).child("Reflection");
         dayReflectionRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -133,9 +138,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
     }
 
     private void setDate() {
-        Calendar cal=Calendar.getInstance();
-		GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
-        eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", new java.util.Date()));
+        eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
     }
 
     private void setGoalView(View view) {
@@ -181,7 +184,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         // Retrieve goals from DB
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference rootRef = database.getReference("Users");
-        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Goals");
+        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child(stringDateKey()).child("Goals");
         goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -198,5 +201,12 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
                 Log.w(TAG, "Failed to read value.", databaseError.toException());
             }
         });
+    }
+
+    private String stringDateKey() {
+        Date dateDate = date.getTime();
+        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy")
+        String dateKey = df.format(dateDate.getTime());
+        return dateKey;
     }
 }
