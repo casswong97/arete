@@ -50,22 +50,27 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 	private RatingBar ratingBar_Status;
 	private FirebaseAuth mAuth;
 	private String TAG = "TAG";
-	private int year, month, dayOfMonth;
-	private GregorianCalendar date;
+	private GregorianCalendar gcDate;
+	private String dateKey;
 
     public JournalFragment() {
 		// Required empty public constructor
-		Date date = new java.util.Date();
-		this.dayOfMonth = date.getDate();
-		this.year = date.getYear();
-		this.month = date.getMonth();
+		this.gcDate = new GregorianCalendar();
+		getKeyFromGCDate(this.gcDate);
 	}
 
 	@SuppressLint("ValidFragment")
-	public JournalFragment(int year, int month, int dayOfMonth) {
-		this.year = year;
-		this.month = month;
-		this.dayOfMonth = dayOfMonth;
+	public JournalFragment(GregorianCalendar gcDate)
+	{
+		this.gcDate = gcDate;
+		getKeyFromGCDate(this.gcDate);
+	}
+
+	private void getKeyFromGCDate(GregorianCalendar gcDate)
+	{
+		Date date = gcDate.getTime();
+		SimpleDateFormat sF = new SimpleDateFormat("dd-MM-yyyy");
+		this.dateKey = sF.format(date.getTime());
 	}
     // TODO: Instance where there's no goals, display a message, currently empty page
 
@@ -137,9 +142,9 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         });
     }
 
-    private void setDate() {
-        eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
-    }
+	private void setDate() {
+		eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", gcDate));
+	}
 
     private void setGoalView(View view) {
         // Set up Recycler Adapter/View for Goals List
@@ -195,18 +200,11 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
                 }
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
-    }
-
-    private String stringDateKey() {
-        Date dateDate = date.getTime();
-        SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy")
-        String dateKey = df.format(dateDate.getTime());
-        return dateKey;
-    }
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				// Failed to read value
+				Log.w(TAG, "Failed to read value.", databaseError.toException());
+			}
+		});
+	}
 }
