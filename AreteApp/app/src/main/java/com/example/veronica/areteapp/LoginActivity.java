@@ -1,6 +1,7 @@
 package com.example.veronica.areteapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.os.Bundle;
@@ -38,20 +39,22 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
     private String TAG = "TAG";
     private GifImageView mGifImageView;
 
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         mGifImageView = (GifImageView) findViewById(R.id.gifLogo);
-//		GifDrawable gifDrawable = null;
-//		try {
-//			gifDrawable = new GifDrawable(getResources(), R.drawable.giphy);
-//			gifDrawable.setLoopCount(1);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		mGifImageView.setImageDrawable(gifDrawable);
+
+		GifDrawable gifDrawable = null;
+		try {
+			gifDrawable = new GifDrawable(getResources(), R.drawable.logo_gif);
+			gifDrawable.setLoopCount(3);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		mGifImageView.setImageDrawable(gifDrawable);
 
         // Get UI objects
         buttonLogin = (Button) findViewById(R.id.buttonLogin);
@@ -64,6 +67,9 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         buttonCreateAccount.setOnClickListener(this);
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
+
+        //create a new progress dialog
+        progressDialog = new ProgressDialog(this, R.style.AppCompatAlertDialogStyle);
     }
 
     @Override
@@ -81,8 +87,13 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
     }
 
     public void createAccount(final String email, String password) {
+
+        progressDialog.setMessage("Registering, please wait...");
+        progressDialog.show();
+
         Toast toast;
         if (password.length() < 6) {
+            progressDialog.hide();
             toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\n Password must be at least 6 characters", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -97,11 +108,13 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                         // if sign in fails, display a msg to user
                         Toast toast;
                         if (!task.isSuccessful()) {
+                            progressDialog.hide();
                             toast = Toast.makeText(LoginActivity.this, "Account Creation Failed.\n Do you already have an account?", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         }
                         else {
+                            progressDialog.hide();
                             toast = Toast.makeText(LoginActivity.this, "Success!\n Account Created!", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
@@ -112,6 +125,10 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
     }
 
     public void signIn(String email, String password) {
+
+        progressDialog.setMessage("Logging in, please wait...");
+        progressDialog.show();
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -123,12 +140,15 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                         Toast toast;
 
                         if (!task.isSuccessful()) {
+                            progressDialog.hide();
+
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\n Did you create an Account?", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         }
                         else {
+                            progressDialog.hide();
                             toast = Toast.makeText(LoginActivity.this, "Success!\n You are logged in!", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
@@ -170,4 +190,3 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         return string.replace(",", ".");
     }
 }
-
