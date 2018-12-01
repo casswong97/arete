@@ -50,23 +50,28 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 	private RatingBar ratingBar_Status;
 	private FirebaseAuth mAuth;
 	private String TAG = "TAG";
-	private int year, month, dayOfMonth;
+	private GregorianCalendar gcDate;
+	private String dateKey;
 
 	public JournalFragment()
 	{
 		// Required empty public constructor
-		Date date = new java.util.Date();
-		this.dayOfMonth = date.getDate();
-		this.year = date.getYear();
-		this.month = date.getMonth();
+		this.gcDate = new GregorianCalendar();
+		getKeyFromGCDate(this.gcDate);
 	}
 
 	@SuppressLint("ValidFragment")
-	public JournalFragment(int year, int month, int dayOfMonth)
+	public JournalFragment(GregorianCalendar gcDate)
 	{
-		this.year = year;
-		this.month = month;
-		this.dayOfMonth = dayOfMonth;
+		this.gcDate = gcDate;
+		getKeyFromGCDate(this.gcDate);
+	}
+
+	private void getKeyFromGCDate(GregorianCalendar gcDate)
+	{
+		Date date = gcDate.getTime();
+		SimpleDateFormat sF = new SimpleDateFormat("dd-MM-yyyy");
+		this.dateKey = sF.format(date.getTime());
 	}
 
 	@Override
@@ -135,9 +140,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
 	}
 
 	private void setDate() {
-		Calendar cal=Calendar.getInstance();
-		GregorianCalendar date = new GregorianCalendar(year, month, dayOfMonth);
-		eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", date));
+		eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", gcDate));
 	}
 
 	private void setGoalView(View view) {

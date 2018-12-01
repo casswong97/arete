@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class ListFragment extends Fragment implements CompoundButton.OnCheckedChangeListener
 {
@@ -48,10 +49,11 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	private FirebaseAuth mAuth;
 	private String TAG = "TAG";
 	private String email;
-	private String todayDate;
+	private String dateKey;
 
 	public ListFragment() {
 		// Required empty public constructor
+		getKeyFromGCDate(new GregorianCalendar());
 	}
 
 	@Override
@@ -67,10 +69,6 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		FirebaseUser user = mAuth.getCurrentUser();
 		this.email = LoginActivity.EncodeString(user.getEmail());
 
-		Date c = Calendar.getInstance().getTime();
-		SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
-		this.todayDate = df.format(c);
-
 		totalCompleted = 0;
 		switchShowCompletedTasks = (CompoundButton) rootview.findViewById(R.id.switchShowCompletedTasks);
 		textViewCompleted = (TextView) rootview.findViewById(R.id.textViewCompleted);
@@ -80,6 +78,13 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		//Generate list View from ArrayList
 		displayListView(rootview);
 		return rootview;
+	}
+
+	private void getKeyFromGCDate(GregorianCalendar gcDate)
+	{
+		Date date = gcDate.getTime();
+		SimpleDateFormat sF = new SimpleDateFormat("dd-MM-yyyy");
+		this.dateKey = sF.format(date.getTime());
 	}
 
 	/**
@@ -103,7 +108,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference rootRef = database.getReference("Users");
 
-		final DatabaseReference goalGoalsRef = rootRef.child(email).child("Calendar").child(todayDate).child("Goals").child(Goals.getGoalName());
+		final DatabaseReference goalGoalsRef = rootRef.child(email).child("Calendar").child(dateKey).child("Goals").child(Goals.getGoalName());
 		goalGoalsRef.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -124,7 +129,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		FirebaseDatabase database = FirebaseDatabase.getInstance();
 		DatabaseReference rootRef = database.getReference("Users");
 
-		final DatabaseReference goalListRef = rootRef.child(email).child("Calendar").child(todayDate).child("Goals");
+		final DatabaseReference goalListRef = rootRef.child(email).child("Calendar").child(dateKey).child("Goals");
 		goalListRef.addListenerForSingleValueEvent(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot dataSnapshot)
