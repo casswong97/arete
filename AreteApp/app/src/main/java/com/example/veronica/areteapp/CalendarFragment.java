@@ -53,7 +53,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     {
 		AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
-		GregorianCalendar gcDate = new GregorianCalendar(year, month-1, dayOfMonth);
+		GregorianCalendar gcDate = new GregorianCalendar(year, month, dayOfMonth);
 		Fragment myFragment = new JournalFragment(gcDate);
 		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
 		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
