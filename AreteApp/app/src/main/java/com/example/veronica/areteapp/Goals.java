@@ -18,12 +18,13 @@ public class Goals {
     public String getGoalName() {
         return goalName;
     }
+    public void setGoalName(String goalName) {this.goalName = goalName;}
 
     public String getGoalReflectionAnswer() {
         return goalReflectionAnswer;
     }
+    public void setGoalReflectionAnswer (String goalName) {this.goalName = goalName;}
 
-    public Boolean getCompletion() {
-        return completion;
-    }
+    public Boolean getCompletion() {return completion; }
+    public void setCompletion(String goalName) {this.goalName = goalName;}
 }

@@ -40,11 +40,12 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class JournalFragment extends Fragment implements Button.OnClickListener {
+public class JournalFragment extends Fragment implements Button.OnClickListener  {
     private TextView eT_Date;
     private Button bT_Submit;
     private ArrayList<Goals> goals;
     private EditText eT_Day_Reflection_answer;
+    private EditText eT_Daily_Exercise;
     private RatingBar ratingBar_Status;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
@@ -60,6 +61,16 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         // Retrieve UI Elements
         eT_Date = rootview.findViewById(R.id.tV_Date);
         eT_Day_Reflection_answer = rootview.findViewById(R.id.eT_Day_Reflection_Answer);
+        eT_Daily_Exercise = rootview.findViewById(R.id.eT_Daily_Exercise);
+        eT_Daily_Exercise.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    updateDBDailyReflection();
+                    // code to execute when EditText loses focus
+                }
+            }
+        });
         bT_Submit = rootview.findViewById(R.id.bt_Submit);
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
@@ -78,14 +89,20 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
         return rootview;
     }
 
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_Submit:
+                updateDayReflectionDB();
+                updateDayReflectionDB();
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
 
         }
     }
+
+
 
     private void updateDayReflectionDB() {
         // Get email of User
@@ -98,6 +115,37 @@ public class JournalFragment extends Fragment implements Button.OnClickListener 
             Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
         }
     }
+
+    private void updateDBDailyReflection() {
+        // Get email of User
+        String email = getEmail();
+        if (!TextUtils.isEmpty(email)) {
+            String dailyExercise = eT_Daily_Exercise.getText().toString();
+            setDBDailyExercise(email, new DailyExercise(dailyExercise));
+        } else {
+            Log.w(TAG, email + " didn't exist, unable to update Reflection Answer");
+        }
+    }
+
+    private void setDBDailyExercise (String email, final DailyExercise dailyExercise) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        final DatabaseReference dailyExerciseRef = rootRef.child(email).child("Calendar").child("TODO: DATE OBJECT").child("Reflection");
+        dailyExerciseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                dailyExerciseRef.setValue(dailyExercise);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
+
+
 
     private void setDBDayReflection(String email, final DayReflection reflection) {
         // Retrieve goals from DB

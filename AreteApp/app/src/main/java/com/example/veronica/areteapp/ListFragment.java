@@ -18,6 +18,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +35,7 @@ public class ListFragment extends Fragment
 {
     ArrayAdapter<String> mTaskAdapter;
     Button checkTaskButton;
+    private FirebaseAuth mAuth;
 
     public ListFragment() {
         // Required empty public constructor
@@ -91,12 +97,26 @@ public class ListFragment extends Fragment
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle("Add a task");
                 builder.setMessage("What do you want to do?");
-                final EditText inputField = new EditText(getActivity());
-                builder.setView(inputField);
+
+                final EditText inputGoalName = new EditText(getActivity());
+                /*How do we "get GoalName" from the EditText inputGoalTitle and load this title
+                 in a way that it creates an object with just null values for the other children? (with the intention of filling these in later of course*/
+                builder.setView(inputGoalName);
                 builder.setPositiveButton("Add", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface di, int i) {
-                        Toast.makeText(getActivity(), inputField.getText(), Toast.LENGTH_SHORT).show();
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        //need to get date in here somehow
+                        DatabaseReference myRef = database.getReference().child(currentUser.getUid());
+
+                        Goals goals = new Goals();
+                        goals.setGoalName(inputGoalName.getText().toString());
+
+                        DatabaseReference childRef = myRef.child(inputGoalName.getText().toString());
+                        childRef.setValue(goals);
+                        //Make sure that this is in the right part of the data tree but hopefully it makes sense
+                        Toast.makeText(getActivity(), inputGoalName.getText(), Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.setNegativeButton("Cancel", null);
