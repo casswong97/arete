@@ -23,13 +23,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static android.support.constraint.Constraints.TAG;
-
-import java.io.IOError;
 import java.io.IOException;
 
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
+
+import static android.support.constraint.Constraints.TAG;
 
 public class LoginActivity extends Activity implements Button.OnClickListener {
 
@@ -159,28 +158,26 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
     }
 
     public void createUserIdEntry(final User user) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference userTableRef = database.getReference("Users");
-        final DatabaseReference userRef = userTableRef.child(user.getUserName());
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    //TODO keep toast?
-                    Toast.makeText(LoginActivity.this, user.getUserName() + " already exists!", Toast.LENGTH_SHORT).show();
-                } else {
-                    userRef.setValue(user);
-                    Toast.makeText(LoginActivity.this, user.getUserName() + " added to DB", Toast.LENGTH_SHORT).show();
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference userTableRef = database.getReference("Users");
+            final DatabaseReference userRef = userTableRef.child(user.getUserName());
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        Toast.makeText(LoginActivity.this, user.getUserName() + " already exists!", Toast.LENGTH_SHORT).show();
+                    } else {
+                        userRef.setValue(user);
+                        Toast.makeText(LoginActivity.this, user.getUserName() + " added to DB", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
-
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    // Failed to read value
+                    Log.w(TAG, "Failed to read value.", databaseError.toException());
+                }
+            });
     }
     // Helper functions to work around Firebase Datapath rules
     public static String EncodeString(String string) {
@@ -191,3 +188,4 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         return string.replace(",", ".");
     }
 }
+
