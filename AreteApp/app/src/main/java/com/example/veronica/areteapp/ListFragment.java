@@ -40,7 +40,6 @@ import java.util.List;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -51,7 +50,6 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	ArrayList<Goals> goalList;
 	CompoundButton switchShowCompletedTasks;
 	TextView textViewCompleted;
-	int totalCompleted = 0;
 	private FirebaseAuth mAuth;
 	private String TAG = "TAG";
 	private String email;
@@ -68,22 +66,59 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		View rootview = inflater.inflate(R.layout.fragment_list, container, false);
 		super.onCreate(savedInstanceState);
 
-		listView = (ListView) rootview.findViewById(R.id.listViewTask);
-
 		// Get Firebase Auth Object
 		mAuth = FirebaseAuth.getInstance();
 		FirebaseUser user = mAuth.getCurrentUser();
 		this.email = LoginActivity.EncodeString(user.getEmail());
-
-		totalCompleted = 0;
+		listView = (ListView) rootview.findViewById(R.id.listViewTask);
 		switchShowCompletedTasks = (CompoundButton) rootview.findViewById(R.id.switchShowCompletedTasks);
 		textViewCompleted = (TextView) rootview.findViewById(R.id.textViewCompleted);
-
 		switchShowCompletedTasks.setOnCheckedChangeListener(this);
+
+		updateGoalsCompleted(0);
 
 		//Generate list View from ArrayList
 		displayListView(rootview);
 		return rootview;
+	}
+
+	private void updateGoalsCompleted(final int update)
+	{
+		// Retrieve goals from DB
+		final FirebaseDatabase database = FirebaseDatabase.getInstance();
+		DatabaseReference rootRef = database.getReference("Users");
+
+		final DatabaseReference goalListRef = rootRef.child(email).child("Calendar").child(dateKey).child("GoalsCompleted");
+		goalListRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+			{
+				if (dataSnapshot.exists())
+				{
+					int currValue = Integer.valueOf(dataSnapshot.getValue().toString());
+					goalListRef.setValue( currValue += update);
+					setGoalsCompletedText(currValue);
+				}
+				else
+				{
+					goalListRef.setValue(0);
+					setGoalsCompletedText(0);
+				}
+
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				// Failed to read value
+				Log.w(TAG, "Failed to read value.", databaseError.toException());
+			}
+		});
+	}
+
+	private void setGoalsCompletedText(int goalsCompleted)
+	{
+		String newCount = "Show " + Integer.toString(goalsCompleted) + " Completed Tasks";
+		textViewCompleted.setText(newCount);
 	}
 
 	private void getKeyFromGCDate(GregorianCalendar gcDate)
@@ -245,11 +280,12 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 						{
 							finalHolder.checkBox.setTextColor(Color.BLACK);
 							_goal.setVisible(true);
-							totalCompleted-=1;
+							updateGoalsCompleted(-1);
 						}
 						setDBGoalList(_goal);
 					}
 				});
+
 
 			}
 			else
@@ -356,9 +392,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	private void completedGoal(final CustomListAdapter.ViewHolder holder, final View convertView)
 	{
 		holder.checkBox.setTextColor(Color.rgb(220, 220, 220));
-		totalCompleted+=1;
-		String newCount = "Show " + Integer.toString(totalCompleted) + " Completed Tasks";
-		textViewCompleted.setText(newCount);
+		updateGoalsCompleted(1);
+
 		// wait
 		final Handler handler = new Handler();
 		handler.postDelayed(new Runnable() {
