@@ -4,6 +4,7 @@ package com.example.veronica.areteapp;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -21,6 +22,7 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -355,6 +357,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	private void buildAlertDiaglogBox(final String title, String message, String positiveButton, final Goals _goal)
 	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
 		builder.setTitle(title);
 		builder.setMessage(message);
 		final EditText inputField = new EditText(getActivity());
@@ -379,6 +382,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 			}
 		});
 		builder.setNegativeButton("Cancel", null);
+
+		builder.setIcon(R.drawable.partyhat);
 		builder.create().show();
 
 
