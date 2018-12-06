@@ -15,11 +15,11 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="14dp"
         android:layout_marginLeft="14dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="10dp"
         android:textSize="18sp"
         android:textStyle="bold"
-        tools:text="Goal Name"
-        app:fontFamily="Perpetua Titling MT"/>
+        app:fontFamily="Perpetua Titling MT"
+        tools:text="Goal Name" />
 
     <EditText
         android:id="@+id/eT_Goal_Reflection"
@@ -28,7 +28,7 @@
         android:layout_alignStart="@+id/tV_Goal_Name"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="43dp"
+        android:layout_marginTop="36dp"
         android:ems="10"
         android:hint="Reflection To Be Completed"
         android:inputType="textMultiLine"
@@ -41,8 +41,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/tV_Goal_Name"
         android:layout_marginStart="6dp"
-        android:layout_marginBottom="-5dp"
+        android:layout_marginBottom="-4dp"
         android:layout_toEndOf="@+id/tV_Goal_Name"
-        tools:text="Completion"
-        app:fontFamily="Perpetua Titling MT"/>
+        app:fontFamily="Perpetua Titling MT"
+        tools:text="Completion" />
 </RelativeLayout>

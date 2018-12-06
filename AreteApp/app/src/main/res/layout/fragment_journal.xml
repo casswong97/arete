@@ -79,12 +79,13 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
-            android:layout_width="350dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_below="@+id/eT_DE"
             android:layout_alignStart="@+id/tV_Date"
-            android:layout_alignParentBottom="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginBottom="173dp" />
+            android:layout_marginStart="-6dp"
+            android:padding="1dp"
+            android:scrollbars="vertical" />
 
         <TextView
             android:id="@+id/tV_Exercise_Entry"

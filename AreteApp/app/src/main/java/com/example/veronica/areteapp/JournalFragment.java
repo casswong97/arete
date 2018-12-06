@@ -121,7 +121,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         switch (v.getId()) {
             case R.id.bt_Submit:
                 updateDayReflectionDB();
-//                Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
                 showCongratsFragment(v);
 
         }
