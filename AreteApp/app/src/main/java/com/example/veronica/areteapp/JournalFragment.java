@@ -109,6 +109,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         initGoals(rootview);
         // Set up Exercise Answer UI
         setExerciseAnswer(getEmail());
+        // Set up Daily Reflection UI
+        setDayReflection(getEmail());
     }
 
     // Set Date textview of the page
@@ -127,8 +129,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         }
     }
 
-    private void showCongratsFragment(View v)
-	{
+    private void showCongratsFragment(View v) {
 		View popupView = getLayoutInflater().inflate(R.layout.layout_congrats, null);
 
 		final PopupWindow popupWindow = new PopupWindow(popupView,
@@ -161,7 +162,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         // Get email of User
         String email = getEmail();
         if (!TextUtils.isEmpty(email)) {
-            int stars = ratingBar_Status.getNumStars();
+            float stars = ratingBar_Status.getRating();
             String dayReflection = eT_Day_Reflection_Answer.getText().toString();
             setDBDayReflection(email, new DayReflection(stars, dayReflection));
         } else {
@@ -180,6 +181,28 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
                 dayReflectionRef.setValue(reflection);
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
+
+    private void setDayReflection(String email) {
+        // Retrieve goals from DB
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child(dateKey).child("Reflection");
+        goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    DayReflection dailyReflection = dataSnapshot.getValue(DayReflection.class);
+                    eT_Day_Reflection_Answer.setText(dailyReflection.getDayReflection());
+                    ratingBar_Status.setRating(dailyReflection.getRating());
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
@@ -219,8 +242,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     }
 
     private void setExerciseAnswer(String email) {
-        // Initialize goals list
-        goals = new ArrayList<>();
         // Retrieve goals from DB
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference rootRef = database.getReference("Users");

@@ -2,21 +2,21 @@ package com.example.veronica.areteapp;
 
 public class DayReflection {
 
-    int status;
+    float rating;
     String dayReflection;
 
     public DayReflection() {
         // Default Constructor
     }
 
-    public DayReflection(int qualityDay, String reflection) {
-        this.status = qualityDay;
+    public DayReflection(float qualityDay, String reflection) {
+        this.rating = qualityDay;
         this.dayReflection = reflection;
 
     }
 
-    public int getStatus() {
-        return status;
+    public float getRating() {
+        return rating;
     }
 
     public String getDayReflection() {
