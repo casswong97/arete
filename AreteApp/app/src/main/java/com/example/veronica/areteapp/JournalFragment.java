@@ -128,6 +128,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         eT_Day_Reflection_Answer.setFocusable(false);
         eT_Day_Reflection_Answer.setClickable(false);
         eT_Day_Reflection_Answer.setCursorVisible(false);
+        ratingBar_Status.setIsIndicator(true);
         ratingBar_Status.setFocusable(false);
         ratingBar_Status.setClickable(false);
         bT_Submit.setEnabled(false);
