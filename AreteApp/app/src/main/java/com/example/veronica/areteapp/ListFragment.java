@@ -19,9 +19,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -233,6 +235,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		{
 			TextView text;
 			CheckBox checkBox;
+			ImageButton buttonDelete;
 		}
 
 		/**
@@ -256,6 +259,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 				holder = new ViewHolder();
 				holder.text = (TextView) convertView.findViewById(R.id.list_item_task_textview);
 				holder.checkBox = (CheckBox) convertView.findViewById(R.id.checkTaskButton);
+				holder.buttonDelete = (ImageButton) convertView.findViewById(R.id.buttonDelete);
+
 				convertView.setTag(holder);
 				final ViewHolder finalHolder = holder;
 				final View finalConvertView = convertView;
@@ -285,6 +290,42 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 							updateGoalsCompleted(-1);
 						}
 						setDBGoalList(_goal);
+					}
+				});
+
+				final ViewHolder finalHolder2 = holder;
+				holder.buttonDelete.setOnClickListener(new View.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						ImageButton ib = (ImageButton) v;
+						Goals _goal = (Goals) finalHolder2.checkBox.getTag();
+
+						FirebaseDatabase database = FirebaseDatabase.getInstance();
+						DatabaseReference rootRef = database.getReference("Users");
+
+						final DatabaseReference goalGoalsRef = rootRef.child(email).child("Calendar").child(dateKey).child("Goals").child(_goal.getGoalName());
+						goalGoalsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+							@Override
+							public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+								goalGoalsRef.removeValue();
+							}
+
+							@Override
+							public void onCancelled(@NonNull DatabaseError databaseError) {
+								// Failed to read value
+								Log.w(TAG, "Failed to read value.", databaseError.toException());
+							}
+						});
+
+						if (_goal.getCompletion())
+						{
+							updateGoalsCompleted(-1);
+						}
+						goalList.remove(_goal);
+						ListFragment.this.goalList.remove(_goal);
+						updateGoalList();
 					}
 				});
 

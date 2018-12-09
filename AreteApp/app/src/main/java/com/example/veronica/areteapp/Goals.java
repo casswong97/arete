@@ -10,6 +10,15 @@ public class Goals {
         // Default constructor
     }
 
+    // custom copy cstor
+    public Goals (Goals _goal)
+    {
+        this.goalName = _goal.getGoalName();
+        this.completion = _goal.getCompletion();
+        this.goalReflectionAnswer = _goal.getGoalReflectionAnswer();
+        this.visible = _goal.getVisible();
+    }
+
     public Goals (String goalName, boolean completed, String reflection, boolean visible) {
         this.goalName = goalName;
         this.completion = completed;
