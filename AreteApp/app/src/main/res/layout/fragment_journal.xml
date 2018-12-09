@@ -48,20 +48,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/colorPrimary" />
 
-        <CheckBox
-            android:id="@+id/checkBoxDailyExercise"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="13dp"
-            android:layout_marginLeft="13dp"
-            android:layout_marginTop="51dp"
-            android:text="Daily Exercise"
-            android:textSize="14sp"
-            android:textStyle="italic" />
-
         <EditText
             android:id="@+id/eT_DE"
             android:layout_width="match_parent"
@@ -145,6 +131,17 @@
             android:text="Goals:"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewDailyExerciseQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="18dp"
+            android:layout_marginLeft="18dp"
+            android:layout_marginTop="53dp" />
 
     </RelativeLayout>
 

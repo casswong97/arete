@@ -48,7 +48,7 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
  */
 
 public class JournalFragment extends Fragment implements Button.OnClickListener, View.OnFocusChangeListener {
-    private TextView eT_Date;
+    private TextView eT_Date, textViewDailyExerciseQuestion;
     private Button bT_Submit;
     private ArrayList<Goals> goals;
     private EditText eT_Day_Reflection_Answer;
@@ -91,6 +91,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
         ratingBar_Status.setOnClickListener(this);
+        textViewDailyExerciseQuestion = rootview.findViewById(R.id.textViewDailyExerciseQuestion);
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
@@ -107,6 +108,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         setDate();
         // Set up Goals UI
         initGoals(rootview);
+        // Set Exercise Question
+        setExerciseQuestion(getEmail());
         // Set up Exercise Answer UI
         setExerciseAnswer(getEmail());
     }
@@ -188,12 +191,12 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         });
     }
 
-
     private void updateExerciseAnswerDB() {
         String email = getEmail();
         if (!TextUtils.isEmpty(email)) {
             String exerciseAnswer = eT_Daily_Exercise_Answer.getText().toString();
-            setDBExerciseAnswer(email, new DailyExercise(exerciseAnswer));
+            String exerciseQuestion = textViewDailyExerciseQuestion.getText().toString();
+            setDBExerciseAnswer(email, new DailyExercise(exerciseQuestion, exerciseAnswer));
         } else {
             Log.w(TAG, email + " didn't exist, unable to update Exercise Answer");
         }
@@ -210,6 +213,40 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
                 exerciseAnswerRef.setValue(exerciseAnswer);
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
+
+    private void setExerciseQuestion(String email)
+    {
+        // Retrieve question # from DB
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        final DatabaseReference questionRef = rootRef.child(email).child("LastQuestionSeen");
+
+        questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists())
+                {
+                    int index = dataSnapshot.getValue(int.class);
+                    Questions question = new Questions();
+                    String nextQuestion = question.getNextQuestion(index);
+                    textViewDailyExerciseQuestion.setText(nextQuestion);
+                    questionRef.setValue(index+1);
+                }
+                else
+                {
+                    questionRef.setValue(0);
+                    Questions question = new Questions();
+                    String nextQuestion = question.getNextQuestion(0);
+                    textViewDailyExerciseQuestion.setText(nextQuestion);
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
