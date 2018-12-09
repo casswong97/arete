@@ -385,8 +385,6 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 
 		builder.setIcon(R.drawable.partyhat);
 		builder.create().show();
-
-
 	}
 
 	/**
