@@ -1,6 +1,7 @@
 package com.example.veronica.areteapp;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -58,6 +60,7 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	private String TAG = "TAG";
 	private String email;
 	private String dateKey;
+	private ProgressBar progressBar;
 
 	public ListFragment() {
 		// Required empty public constructor
@@ -78,6 +81,8 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 		switchShowCompletedTasks = (CompoundButton) rootview.findViewById(R.id.switchShowCompletedTasks);
 		textViewCompleted = (TextView) rootview.findViewById(R.id.textViewCompleted);
 		switchShowCompletedTasks.setOnCheckedChangeListener(this);
+		progressBar = (ProgressBar) rootview.findViewById(R.id.progressBar);
+		progressBar.setVisibility(View.VISIBLE);
 
 		updateGoalsCompleted(0);
 
@@ -138,13 +143,19 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 	 */
 	private void displayListView(View rootview)
 	{
-		//Array list of to-do items
-
-		// junk data
-		goalList = new ArrayList<Goals>();
-		// Assign adapter to ListView
-		updateGoalList();
-		getDBGoalList();
+		// spin for 5 milsecs
+		final Handler handler = new Handler();
+		handler.postDelayed(new Runnable() {
+			@Override
+			public void run() {
+				// Do something after 2s = 2000ms
+				goalList = new ArrayList<Goals>();
+				// Assign adapter to ListView
+				updateGoalList();
+				getDBGoalList();
+				progressBar.setVisibility(View.INVISIBLE);
+			}
+		}, 2000);
 	}
 
 	// setOneGoal
