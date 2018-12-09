@@ -4,9 +4,11 @@ package com.example.veronica.areteapp;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,15 +21,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.support.annotation.NonNull;
 
-<<<<<<< Updated upstream
-/**
- * A simple {@link Fragment} subclass.
- */
-public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener {
-    CalendarView calendarView;
-    private BottomNavigationView mMainNav;
-    private FrameLayout mMainFrame;
-=======
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -50,18 +43,18 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener, Button.OnClickListener {
+public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener, Button.OnClickListener
+{
     private CalendarView calendarView;
-    private BottomNavigationView mMainNav;
-    private Spinner spinnerDate;
-    private FirebaseAuth mAuth;
+	private BottomNavigationView mMainNav;
+	private Spinner spinnerDate;
+	private FirebaseAuth mAuth;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     final private List<String> inputs = new ArrayList<String>();
     private Button buttonSubmit;
 
     String spinnerInput;
     int year, month, dayOfMonth;
->>>>>>> Stashed changes
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -69,12 +62,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 //        getKeyFromGCDate(this.gcDate);
     }
 
-<<<<<<< Updated upstream
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootview = inflater.inflate(R.layout.fragment_calendar, container, false);
-=======
 //    private void getKeyFromGCDate(GregorianCalendar gcDate) {
 //        Date date = gcDate.getTime();
 //        SimpleDateFormat sF = new SimpleDateFormat("dd-MM-yyyy");
@@ -83,22 +70,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
         final View rootview = inflater.inflate(R.layout.fragment_calendar, container, false);
->>>>>>> Stashed changes
 
+        mMainNav = getActivity().findViewById(R.id.mainNav);
         calendarView = rootview.findViewById(R.id.calendarView);
         calendarView.setOnDateChangeListener(this);
         spinnerDate = (Spinner) rootview.findViewById(R.id.spinnerDate);
         buttonSubmit = rootview.findViewById(R.id.buttonSubmit);
 
-<<<<<<< Updated upstream
-        mMainNav = (BottomNavigationView) rootview.findViewById(R.id.mainNav);
-        mMainFrame = (FrameLayout) rootview.findViewById(R.id.mainFrame);
-
-        // Inflate the layout for this fragment
-        return rootview;
-=======
         buttonSubmit.setOnClickListener(this);
 
         // Get Firebase Auth Object
@@ -118,7 +99,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //adds dateName to the list inputs
                 //for use in putting items into spinnerDate
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                for (DataSnapshot ds: dataSnapshot.getChildren()) {
                     String dateName = String.valueOf(ds.getKey());
                     inputs.add(dateName);
                 }
@@ -158,9 +139,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 //
 		// Inflate the layout for this fragment
 		return rootview;
->>>>>>> Stashed changes
     }
-
 
     //this doesn't actually go to the day's activity... don't know how to make it do that
     @Override
@@ -176,13 +155,14 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
     }
 
     @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
-        AppCompatActivity activity = (AppCompatActivity) view.getContext();
-        Fragment myFragment = new JournalFragment();
-        activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
+    {
+		AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
-        //TODO: onSelectedDayChange, change bottom navigation bar icon/color to journalNav
-        //mMainNav.setSelectedItemId(R.id.journalNav);
+		GregorianCalendar gcDate = new GregorianCalendar(year, month, dayOfMonth);
+		Fragment myFragment = new JournalFragment(gcDate);
+		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
     }
 
 }

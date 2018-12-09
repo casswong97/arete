@@ -1,0 +1,9 @@
+dea/misc.xml
+.idea
+.idea/*
+*.iml
+.gradle
+.DS_Store
+local.properties
+build
+capture*
