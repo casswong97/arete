@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -54,6 +55,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     private EditText eT_Day_Reflection_Answer;
     private EditText eT_Daily_Exercise_Answer;
     private RatingBar ratingBar_Status;
+    private CheckBox checkBoxDailyExercise;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
 	private GregorianCalendar gcDate;
@@ -91,6 +93,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
         ratingBar_Status.setOnClickListener(this);
+        checkBoxDailyExercise = rootview.findViewById(R.id.checkBoxDailyExercise);
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
@@ -111,6 +114,24 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         setExerciseAnswer(getEmail());
         // Set up Daily Reflection UI
         setDayReflection(getEmail());
+        // If not today, hide some functionality for UI
+        if (gcDate.compareTo(new GregorianCalendar()) < 0) {
+            setPastDateUI();
+        }
+    }
+
+    private void setPastDateUI() {
+        checkBoxDailyExercise.setClickable(false);
+        eT_Daily_Exercise_Answer.setFocusable(false);
+        eT_Daily_Exercise_Answer.setClickable(false);
+        eT_Daily_Exercise_Answer.setCursorVisible(false);
+        eT_Day_Reflection_Answer.setFocusable(false);
+        eT_Day_Reflection_Answer.setClickable(false);
+        eT_Day_Reflection_Answer.setCursorVisible(false);
+        ratingBar_Status.setFocusable(false);
+        ratingBar_Status.setClickable(false);
+        bT_Submit.setEnabled(false);
+        bT_Submit.setVisibility(View.INVISIBLE);
     }
 
     // Set Date textview of the page
