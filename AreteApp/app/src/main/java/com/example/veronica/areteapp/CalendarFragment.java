@@ -136,8 +136,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
 		builder.setIcon(R.drawable.ic_calendar);
 		builder.create().show();
-
-
 	}
 
 }
