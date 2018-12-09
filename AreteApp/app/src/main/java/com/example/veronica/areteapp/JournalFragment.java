@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -54,6 +55,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     private EditText eT_Day_Reflection_Answer;
     private EditText eT_Daily_Exercise_Answer;
     private RatingBar ratingBar_Status;
+    private CheckBox checkBoxDailyExercise;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
 	private GregorianCalendar gcDate;
@@ -92,6 +94,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
         ratingBar_Status.setOnClickListener(this);
         textViewDailyExerciseQuestion = rootview.findViewById(R.id.textViewDailyExerciseQuestion);
+        checkBoxDailyExercise = rootview.findViewById(R.id.checkBoxDailyExercise);
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
@@ -112,6 +115,27 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         setExerciseQuestion(getEmail());
         // Set up Exercise Answer UI
         setExerciseAnswer(getEmail());
+        // Set up Daily Reflection UI
+        setDayReflection(getEmail());
+        // If not today, hide some functionality for UI
+        if (gcDate.compareTo(new GregorianCalendar()) < 0) {
+            setPastDateUI();
+        }
+    }
+
+    private void setPastDateUI() {
+        checkBoxDailyExercise.setClickable(false);
+        eT_Daily_Exercise_Answer.setFocusable(false);
+        eT_Daily_Exercise_Answer.setClickable(false);
+        eT_Daily_Exercise_Answer.setCursorVisible(false);
+        eT_Day_Reflection_Answer.setFocusable(false);
+        eT_Day_Reflection_Answer.setClickable(false);
+        eT_Day_Reflection_Answer.setCursorVisible(false);
+        ratingBar_Status.setIsIndicator(true);
+        ratingBar_Status.setFocusable(false);
+        ratingBar_Status.setClickable(false);
+        bT_Submit.setEnabled(false);
+        bT_Submit.setVisibility(View.INVISIBLE);
     }
 
     // Set Date textview of the page
@@ -130,8 +154,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         }
     }
 
-    private void showCongratsFragment(View v)
-	{
+    private void showCongratsFragment(View v) {
 		View popupView = getLayoutInflater().inflate(R.layout.layout_congrats, null);
 
 		final PopupWindow popupWindow = new PopupWindow(popupView,
@@ -164,7 +187,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         // Get email of User
         String email = getEmail();
         if (!TextUtils.isEmpty(email)) {
-            int stars = ratingBar_Status.getNumStars();
+            float stars = ratingBar_Status.getRating();
             String dayReflection = eT_Day_Reflection_Answer.getText().toString();
             setDBDayReflection(email, new DayReflection(stars, dayReflection));
         } else {
@@ -183,6 +206,28 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
                 dayReflectionRef.setValue(reflection);
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", databaseError.toException());
+            }
+        });
+    }
+
+    private void setDayReflection(String email) {
+        // Retrieve goals from DB
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child(dateKey).child("Reflection");
+        goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    DayReflection dailyReflection = dataSnapshot.getValue(DayReflection.class);
+                    eT_Day_Reflection_Answer.setText(dailyReflection.getDayReflection());
+                    ratingBar_Status.setRating(dailyReflection.getRating());
+                }
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
@@ -256,8 +301,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     }
 
     private void setExerciseAnswer(String email) {
-        // Initialize goals list
-        goals = new ArrayList<>();
         // Retrieve goals from DB
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference rootRef = database.getReference("Users");
