@@ -41,7 +41,8 @@
         android:layout_height="39dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:background="@color/common_google_signin_btn_text_dark_default"
+        tools:srcCompat="@drawable/ic_delete_goal" />
 
 
 </RelativeLayout>
