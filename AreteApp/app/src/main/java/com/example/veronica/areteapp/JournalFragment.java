@@ -52,13 +52,12 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
  */
 
 public class JournalFragment extends Fragment implements Button.OnClickListener, View.OnFocusChangeListener {
-    private TextView eT_Date, textViewDailyExerciseQuestion;
+    private TextView eT_Date, tV_Exercise_Entry;
     private Button bT_Submit;
     private ArrayList<Goals> goals;
     private EditText eT_Day_Reflection_Answer;
     private EditText eT_Daily_Exercise_Answer;
     private RatingBar ratingBar_Status;
-    private CheckBox checkBoxDailyExercise;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
 	private GregorianCalendar gcDate;
@@ -96,8 +95,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
         ratingBar_Status.setOnClickListener(this);
-        textViewDailyExerciseQuestion = rootview.findViewById(R.id.textViewDailyExerciseQuestion);
-        checkBoxDailyExercise = rootview.findViewById(R.id.checkBoxDailyExercise);
+		tV_Exercise_Entry = (TextView) rootview.findViewById(R.id.tV_Exercise_Entry);
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
@@ -114,11 +112,11 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         setDate();
         // Set up Goals UI
         initGoals(rootview);
-        // Set Exercise Question
+		// Set Exercise Question
         setExerciseQuestion(getEmail());
         // Set up Exercise Answer UI
         setExerciseAnswer(getEmail());
-        // Set up Daily Reflection UI
+		// Set up Daily Reflection UI
         setDayReflection(getEmail());
         // If not today, hide some functionality for UI
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
@@ -130,7 +128,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     }
 
     private void setPastDateUI() {
-        checkBoxDailyExercise.setClickable(false);
         eT_Daily_Exercise_Answer.setFocusable(false);
         eT_Daily_Exercise_Answer.setClickable(false);
         eT_Daily_Exercise_Answer.setCursorVisible(false);
@@ -245,8 +242,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     private void updateExerciseAnswerDB() {
         String email = getEmail();
         if (!TextUtils.isEmpty(email)) {
-            String exerciseAnswer = eT_Daily_Exercise_Answer.getText().toString();
-            String exerciseQuestion = textViewDailyExerciseQuestion.getText().toString();
+			String exerciseQuestion = tV_Exercise_Entry.getText().toString();
+			String exerciseAnswer = eT_Daily_Exercise_Answer.getText().toString();
             setDBExerciseAnswer(email, new DailyExercise(exerciseQuestion, exerciseAnswer));
         } else {
             Log.w(TAG, email + " didn't exist, unable to update Exercise Answer");
@@ -272,38 +269,60 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         });
     }
 
-    private void setExerciseQuestion(String email)
+    private void setExerciseQuestion(final String email)
     {
         // Retrieve question # from DB
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference rootRef = database.getReference("Users");
-        final DatabaseReference questionRef = rootRef.child(email).child("LastQuestionSeen");
+        final DatabaseReference rootRef = database.getReference("Users");
+        // if already populated question for today
+		DatabaseReference deQuestionRef = rootRef.child(email).child(dateKey).child("ExerciseAnswer").child("dailyExerciseQuestion");
+		deQuestionRef.addListenerForSingleValueEvent(new ValueEventListener()
+		{
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+			{
+				if (dataSnapshot.exists())
+				{
+					// do nothing
+					return;
+				}
+				else
+				{
+					final DatabaseReference questionRef = rootRef.child(email).child("LastQuestionSeen");
 
-        questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists())
-                {
-                    int index = dataSnapshot.getValue(int.class);
-                    Questions question = new Questions();
-                    String nextQuestion = question.getNextQuestion(index);
-                    textViewDailyExerciseQuestion.setText(nextQuestion);
-                    questionRef.setValue(index+1);
-                }
-                else
-                {
-                    questionRef.setValue(0);
-                    Questions question = new Questions();
-                    String nextQuestion = question.getNextQuestion(0);
-                    textViewDailyExerciseQuestion.setText(nextQuestion);
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
+					questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+							if (dataSnapshot.exists())
+							{
+								int index = dataSnapshot.getValue(int.class);
+								Questions question = new Questions();
+								String nextQuestion = question.getNextQuestion(index);
+								tV_Exercise_Entry.setText(nextQuestion);
+								questionRef.setValue(index+1);
+							}
+							else
+							{
+								questionRef.setValue(0);
+								Questions question = new Questions();
+								String nextQuestion = question.getNextQuestion(0);
+								tV_Exercise_Entry.setText(nextQuestion);
+							}
+						}
+						@Override
+						public void onCancelled(@NonNull DatabaseError databaseError) {
+							// Failed to read value
+							Log.w(TAG, "Failed to read value.", databaseError.toException());
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError)
+			{
+			}
+		});
     }
 
     private void setExerciseAnswer(String email) {
@@ -316,6 +335,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                     DailyExercise exerciseResponse = dataSnapshot.getValue(DailyExercise.class);
+                    tV_Exercise_Entry.setText(exerciseResponse.getDailyExerciseQuestion());
                     eT_Daily_Exercise_Answer.setText(exerciseResponse.getDailyExerciseAnswer());
                 }
             }
