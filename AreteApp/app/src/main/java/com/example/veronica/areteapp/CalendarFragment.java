@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -54,6 +55,16 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 		AppCompatActivity activity = (AppCompatActivity) view.getContext();
 
 		GregorianCalendar gcDate = new GregorianCalendar(year, month, dayOfMonth);
+
+		// if date is in future, no relfection entry yet
+		if (gcDate.compareTo(new GregorianCalendar()) > 0)
+		{
+			Toast toast = Toast.makeText(getActivity(), "This date is in the future. No Reflection entered for this date yet.", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return;
+		}
+
 		Fragment myFragment = new JournalFragment(gcDate);
 		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
 		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);

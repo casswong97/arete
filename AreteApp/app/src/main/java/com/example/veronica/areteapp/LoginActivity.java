@@ -168,7 +168,7 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                         Toast.makeText(LoginActivity.this, user.getUserName() + " already exists!", Toast.LENGTH_SHORT).show();
                     } else {
                         userRef.setValue(user);
-                        Toast.makeText(LoginActivity.this, user.getUserName() + " added to DB", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(LoginActivity.this, user.getUserName() + " added to DB", Toast.LENGTH_SHORT).show();
                     }
                 }
 
