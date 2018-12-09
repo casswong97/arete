@@ -6,6 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="135dp"
+        android:layout_alignStart="@+id/textWelcome"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="121dp"
+        android:layout_marginTop="12dp"
+        android:src="@drawable/logo_gif" />
+
+    <Button
+        android:id="@+id/buttonCreateAccount"
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPassword"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="122dp"
+        android:layout_marginTop="99dp"
+        android:background="@color/colorPrimaryDark"
+        android:text="Create Account"
+        android:textColor="@color/colorPrimary"
+        app:fontFamily="Perpetua Titling MT" />
+
     <TextView
         android:id="@+id/textWelcom"
         android:layout_width="wrap_content"
@@ -15,7 +38,11 @@
         android:layout_marginTop="69dp"
         android:text="Arete"
         android:textAllCaps="true"
+<<<<<<< Updated upstream
         android:textSize="30sp"
+=======
+        android:textSize="40sp"
+>>>>>>> Stashed changes
         android:typeface="normal"
         app:fontFamily="Perpetua Titling MT"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -31,7 +58,12 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textWelcom"
         android:layout_alignParentTop="true"
+<<<<<<< Updated upstream
         android:layout_marginTop="158dp"
+=======
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="164dp"
+>>>>>>> Stashed changes
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
@@ -44,7 +76,12 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/textWelcom"
         android:layout_alignParentTop="true"
+<<<<<<< Updated upstream
         android:layout_marginTop="216dp"
+=======
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="234dp"
+>>>>>>> Stashed changes
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
@@ -57,13 +94,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPassword"
         android:layout_alignParentStart="true"
+<<<<<<< Updated upstream
         android:layout_marginStart="136dp"
         android:layout_marginTop="24dp"
+=======
+        android:layout_marginStart="149dp"
+        android:layout_marginTop="35dp"
+>>>>>>> Stashed changes
         android:background="@color/colorPrimaryDark"
         android:text="Login"
         app:fontFamily="Perpetua Titling MT"
         android:textColor="@color/colorPrimary" />
 
+<<<<<<< Updated upstream
     <Button
         android:id="@+id/buttonCreateAccount"
         android:layout_width="146dp"
@@ -87,5 +130,16 @@
         android:layout_marginTop="-262dp"
         android:layout_toEndOf="@+id/buttonCreateAccount"
         android:src="@drawable/logo" />
+=======
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="235dp"
+        android:layout_alignEnd="@+id/buttonLogin"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="-174dp"
+        android:layout_marginBottom="0dp"
+        android:src="@drawable/mountain_2" />
+>>>>>>> Stashed changes
 
 </RelativeLayout>
