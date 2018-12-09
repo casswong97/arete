@@ -1,6 +1,8 @@
 package com.example.veronica.areteapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -9,6 +11,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener
 {
@@ -19,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ListFragment listFragment;
     private CalendarFragment calendarFragment;
     private JournalFragment journalFragment;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -36,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         setFragment(homeFragment);
         mMainNav.setOnNavigationItemSelectedListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -56,6 +63,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 return true;
             case R.id.journalNav:
                 setFragment(journalFragment);
+                return true;
+
+            case R.id.logOutNav:
+
+                FirebaseAuth.getInstance().signOut();
+
+                this.finishAffinity();
+
+                Intent myIntent = new Intent(this, LoginActivity.class);
+                this.startActivity(myIntent);
+
                 return true;
 
             default:

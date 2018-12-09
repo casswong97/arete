@@ -49,7 +49,7 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
 		GifDrawable gifDrawable = null;
 		try {
 			gifDrawable = new GifDrawable(getResources(), R.drawable.logo_gif);
-			gifDrawable.setLoopCount(3);
+			gifDrawable.setLoopCount(5);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -91,9 +91,23 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
         progressDialog.show();
 
         Toast toast;
-        if (password.length() < 6) {
+        if (email.length() == 0) {
             progressDialog.hide();
-            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\n Password must be at least 6 characters", Toast.LENGTH_SHORT);
+            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\nPlease enter a valid email.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
+        }
+        else if (password.length() == 0) {
+            progressDialog.hide();
+            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\nPlease enter a valid password.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
+        }
+        else if (password.length() < 6) {
+            progressDialog.hide();
+            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\nPassword must be at least 6 characters", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
             return;
@@ -108,13 +122,13 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
                         Toast toast;
                         if (!task.isSuccessful()) {
                             progressDialog.hide();
-                            toast = Toast.makeText(LoginActivity.this, "Account Creation Failed.\n Do you already have an account?", Toast.LENGTH_SHORT);
+                            toast = Toast.makeText(LoginActivity.this, "Account Creation Failed.\nPlease check if you registered an account, and if you entered your email and password correctly.", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                         }
                         else {
                             progressDialog.hide();
-                            toast = Toast.makeText(LoginActivity.this, "Success!\n Account Created!", Toast.LENGTH_SHORT);
+                            toast = Toast.makeText(LoginActivity.this, "Success!\nAccount Created!", Toast.LENGTH_SHORT);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
                             createUserIdEntry(new User(EncodeString(email)));
@@ -127,6 +141,23 @@ public class LoginActivity extends Activity implements Button.OnClickListener {
 
         progressDialog.setMessage("Logging in, please wait...");
         progressDialog.show();
+
+        Toast toast;
+        if (email.length() == 0) {
+            progressDialog.hide();
+            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\nPlease enter a valid email.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
+        }
+        else if (password.length() == 0) {
+            progressDialog.hide();
+            toast = Toast.makeText(LoginActivity.this, "Authentication Failed.\nPlease enter a valid password.", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+            return;
+        }
+
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
