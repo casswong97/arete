@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +33,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import org.joda.time.DateTimeComparator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -118,7 +121,10 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         // Set up Daily Reflection UI
         setDayReflection(getEmail());
         // If not today, hide some functionality for UI
-        if (gcDate.compareTo(new GregorianCalendar()) < 0) {
+        DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
+        Date date = gcDate.getTime();
+        Date today = new Date();
+        if (dateTimeComparator.compare(date, today) < 0) {
             setPastDateUI();
         }
     }
