@@ -13,7 +13,7 @@
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="350dp"
+            android:layout_height="393dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="64dp" />
@@ -28,6 +28,18 @@
             android:text="Jump To Date"
             android:textColor="@color/colorPrimary"
             app:fontFamily="Perpetua Titling MT" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="313dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="0dp"
+            android:src="@drawable/mountain_2" />
 
     </RelativeLayout>
 
