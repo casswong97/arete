@@ -2,25 +2,20 @@ package com.example.veronica.areteapp;
 
 
 import android.annotation.SuppressLint;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -38,12 +33,8 @@ import org.joda.time.DateTimeComparator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
 
 import static com.example.veronica.areteapp.LoginActivity.EncodeString;
 
@@ -52,13 +43,12 @@ import static com.example.veronica.areteapp.LoginActivity.EncodeString;
  */
 
 public class JournalFragment extends Fragment implements Button.OnClickListener, View.OnFocusChangeListener {
-    private TextView eT_Date;
+    private TextView eT_Date, tV_Exercise_Entry;
     private Button bT_Submit;
     private ArrayList<Goals> goals;
     private EditText eT_Day_Reflection_Answer;
     private EditText eT_Daily_Exercise_Answer;
     private RatingBar ratingBar_Status;
-    private CheckBox checkBoxDailyExercise;
     private FirebaseAuth mAuth;
     private String TAG = "TAG";
 	private GregorianCalendar gcDate;
@@ -96,7 +86,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
         ratingBar_Status.setOnClickListener(this);
-        checkBoxDailyExercise = rootview.findViewById(R.id.checkBoxDailyExercise);
+		tV_Exercise_Entry = (TextView) rootview.findViewById(R.id.tV_Exercise_Entry);
 
         // Get Firebase Auth Object
         mAuth = FirebaseAuth.getInstance();
@@ -113,9 +103,9 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         setDate();
         // Set up Goals UI
         initGoals(rootview);
-        // Set up Exercise Answer UI
-        setExerciseAnswer(getEmail());
-        // Set up Daily Reflection UI
+		// Set Exercise Question
+        setExercise(getEmail());
+		// Set up Daily Reflection UI
         setDayReflection(getEmail());
         // If not today, hide some functionality for UI
         DateTimeComparator dateTimeComparator = DateTimeComparator.getDateOnlyInstance();
@@ -127,7 +117,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
     }
 
     private void setPastDateUI() {
-        checkBoxDailyExercise.setClickable(false);
         eT_Daily_Exercise_Answer.setFocusable(false);
         eT_Daily_Exercise_Answer.setClickable(false);
         eT_Daily_Exercise_Answer.setCursorVisible(false);
@@ -153,7 +142,6 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
                 updateDayReflectionDB();
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
                 showCongratsFragment(v);
-
         }
     }
 
@@ -239,12 +227,12 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         });
     }
 
-
     private void updateExerciseAnswerDB() {
         String email = getEmail();
         if (!TextUtils.isEmpty(email)) {
-            String exerciseAnswer = eT_Daily_Exercise_Answer.getText().toString();
-            setDBExerciseAnswer(email, new DailyExercise(exerciseAnswer));
+			String exerciseQuestion = tV_Exercise_Entry.getText().toString();
+			String exerciseAnswer = eT_Daily_Exercise_Answer.getText().toString();
+            setDBExerciseAnswer(email, new DailyExercise(exerciseQuestion, exerciseAnswer));
         } else {
             Log.w(TAG, email + " didn't exist, unable to update Exercise Answer");
         }
@@ -257,7 +245,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         final DatabaseReference exerciseAnswerRef = rootRef.child(email).child("Calendar").child(dateKey).child("ExerciseAnswer");
         exerciseAnswerRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+			{
                 exerciseAnswerRef.setValue(exerciseAnswer);
             }
 
@@ -269,25 +258,65 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         });
     }
 
-    private void setExerciseAnswer(String email) {
-        // Retrieve goals from DB
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference rootRef = database.getReference("Users");
-        DatabaseReference goalTableRef = rootRef.child(email).child("Calendar").child(dateKey).child("ExerciseAnswer");
-        goalTableRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    DailyExercise exerciseResponse = dataSnapshot.getValue(DailyExercise.class);
-                    eT_Daily_Exercise_Answer.setText(exerciseResponse.getDailyExerciseAnswer());
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", databaseError.toException());
-            }
-        });
+    private void setExercise(final String email)
+    {
+        // Retrieve question # from DB
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference rootRef = database.getReference("Users");
+        // if already populated question for today
+		final DatabaseReference deQuestionRef = rootRef.child(email).child("Calendar").child(dateKey).child("ExerciseAnswer");
+		deQuestionRef.addListenerForSingleValueEvent(new ValueEventListener()
+		{
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+			{
+				if (dataSnapshot.exists())
+				{
+					// set UI
+					tV_Exercise_Entry.setText(dataSnapshot.child("dailyExerciseQuestion").getValue().toString());
+					eT_Daily_Exercise_Answer.setText(dataSnapshot.child("dailyExerciseAnswer").getValue().toString());
+				}
+				else
+				{
+					// get question from DB
+					final DatabaseReference questionRef = rootRef.child(email).child("LastQuestionSeen");
+					questionRef.addListenerForSingleValueEvent(new ValueEventListener() {
+						@Override
+						public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+							if (dataSnapshot.exists())
+							{
+								int index = dataSnapshot.getValue(int.class);
+								Questions question = new Questions();
+								String nextQuestion = question.getNextQuestion(index);
+								tV_Exercise_Entry.setText(nextQuestion);
+								questionRef.setValue(index+1);
+							}
+							else
+							{
+								questionRef.setValue(0);
+								Questions question = new Questions();
+								String nextQuestion = question.getNextQuestion(0);
+								tV_Exercise_Entry.setText(nextQuestion);
+							}
+
+							updateExerciseAnswerDB();
+						}
+						@Override
+						public void onCancelled(@NonNull DatabaseError databaseError) {
+							// Failed to read value
+							Log.w(TAG, "Failed to read value.", databaseError.toException());
+						}
+					});
+
+
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError)
+			{
+			}
+		});
     }
 
     private void initRecyclerView(View view) {
