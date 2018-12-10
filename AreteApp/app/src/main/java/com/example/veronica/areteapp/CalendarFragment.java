@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalendarFragment extends Fragment implements CalendarView.OnDateChangeListener, Button.OnClickListener
+public class CalendarFragment extends Fragment implements Button.OnClickListener
 {
     private CalendarView calendarView;
 	private BottomNavigationView mMainNav;
@@ -75,7 +75,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 		this.email = LoginActivity.EncodeString(user.getEmail());
         buttonJumpToDate.setOnClickListener(this);
 
-        // set star color
+		// set star color
 		fiveStars = new ColorDrawable(getResources().getColor(R.color.colorFiveStars));
 		fourStars = new ColorDrawable(getResources().getColor(R.color.colorFourStars));
 		threeStars = new ColorDrawable(getResources().getColor(R.color.colorThreeStars));
@@ -84,8 +84,6 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 
 		setCalendroidFrag();
         setCalendarColors();
-
-		// Inflate the layout for this fragment
 
 		return rootview;
     }
@@ -109,20 +107,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 			@Override
 			public void onSelectDate(Date date, View view)
 			{
-				GregorianCalendar gcDate = new GregorianCalendar(date.getYear()+1900, date.getMonth(), date.getDate());
-
-				// if date is in future, no reflection entry yet
-				if (gcDate.compareTo(new GregorianCalendar()) > 0)
-				{
-					Toast toast = Toast.makeText(getActivity(), "This date is in the future. No Reflection entered for this date yet.", Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.CENTER, 0, 0);
-					toast.show();
-					return;
-				}
-
-				Fragment myFragment = new JournalFragment(gcDate);
-				getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
-				mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
+				onSelectedDate(date.getYear()+1900, date.getMonth(), date.getDate());
 			}
 
 			@Override
@@ -146,6 +131,24 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 		caldroidFragment.setCaldroidListener(listener);
 	}
 
+	private void onSelectedDate(int year, int month, int day)
+	{
+		GregorianCalendar gcDate = new GregorianCalendar(year, month, day);
+
+		// if date is in future, no reflection entry yet
+		if (gcDate.compareTo(new GregorianCalendar()) > 0)
+		{
+			Toast toast = Toast.makeText(getActivity(), "This date is in the future. No Reflection entered for this date yet.", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+			return;
+		}
+
+		Fragment myFragment = new JournalFragment(gcDate);
+		getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
+		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
+
+	}
 
     private void setCalendarColors()
 	{
@@ -239,29 +242,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 				buildAlertDiaglogBox("Select Date:", "Format dd-MM-yyyy", "Go to date", todayDate);
 				break;
 		}
-
 	}
-
-    @Override
-    public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth)
-    {
-		AppCompatActivity activity = (AppCompatActivity) view.getContext();
-		GregorianCalendar gcDate = new GregorianCalendar(year, month, dayOfMonth);
-
-		// if date is in future, no relfection entry yet
-		if (gcDate.compareTo(new GregorianCalendar()) > 0)
-		{
-			Toast toast = Toast.makeText(getActivity(), "This date is in the future. No Reflection entered for this date yet.", Toast.LENGTH_SHORT);
-			toast.setGravity(Gravity.CENTER, 0, 0);
-			toast.show();
-			return;
-		}
-
-		Fragment myFragment = new JournalFragment(gcDate);
-		activity.getSupportFragmentManager().beginTransaction().replace(R.id.mainFrame, myFragment).addToBackStack(null).commit();
-		mMainNav.getMenu().findItem(R.id.journalNav).setChecked(true);
-    }
-
 
 	private void buildAlertDiaglogBox(final String title, String message, String positiveButton, final String todayDate)
 	{
@@ -287,7 +268,7 @@ public class CalendarFragment extends Fragment implements CalendarView.OnDateCha
 					int month = Integer.valueOf(enteredDate.substring(3, 5)) - 1;
 					int dayOfMonth = Integer.valueOf(enteredDate.substring(0, 2));
 
-					onSelectedDayChange(calendarView, year, month, dayOfMonth);
+					onSelectedDate(year, month, dayOfMonth);
 				}
 				catch (Exception exception)
 				{
