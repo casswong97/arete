@@ -2,6 +2,10 @@ package com.example.veronica.areteapp;
 
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -85,7 +89,15 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         bT_Submit = rootview.findViewById(R.id.bt_Submit);
         bT_Submit.setOnClickListener(this);
         ratingBar_Status = rootview.findViewById(R.id.ratingBar_Status);
-        ratingBar_Status.setOnClickListener(this);
+        ratingBar_Status.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener(){
+
+			@Override
+			public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser)
+			{
+				setStarColor(ratingBar, rating, fromUser);
+			}
+		});
+
 		tV_Exercise_Entry = (TextView) rootview.findViewById(R.id.tV_Exercise_Entry);
 
         // Get Firebase Auth Object
@@ -97,6 +109,50 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         // Inflate the layout for this fragment
         return rootview;
     }
+
+    private void setStarColor(RatingBar ratingBar, float rating, boolean fromUser)
+	{
+		int colorZeroStars = getResources().getColor(R.color.colorAccent);
+		int colorOneStar = getResources().getColor(R.color.colorOneStar);
+		int colorTwoStars = getResources().getColor(R.color.colorTwoStars);
+		int colorThreeStars = getResources().getColor(R.color.colorThreeStars);
+		int colorFourStars = getResources().getColor(R.color.colorFourStars);
+		int colorFiveStars = getResources().getColor(R.color.colorFiveStars);
+
+		LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
+		stars.getDrawable(0).setColorFilter(colorZeroStars, PorterDuff.Mode.SRC_ATOP);
+
+		//change color of 5 stars
+		if (ratingBar.getRating() == 5f)
+		{
+			stars.getDrawable(2).setColorFilter(colorFiveStars, PorterDuff.Mode.SRC_ATOP);
+			stars.getDrawable(1).setColorFilter(colorFiveStars, PorterDuff.Mode.SRC_ATOP);
+		}
+		//change color of 4 stars
+		else if (ratingBar.getRating() == 4f)
+		{
+			stars.getDrawable(2).setColorFilter(colorFourStars, PorterDuff.Mode.SRC_ATOP);
+			stars.getDrawable(1).setColorFilter(colorFourStars, PorterDuff.Mode.SRC_ATOP);
+		}
+		//change color of 3 stars
+		else if (ratingBar.getRating() == 3f)
+		{
+			stars.getDrawable(2).setColorFilter(colorThreeStars, PorterDuff.Mode.SRC_ATOP);
+			stars.getDrawable(1).setColorFilter(colorThreeStars, PorterDuff.Mode.SRC_ATOP);
+		}
+		//change color of 2 stars
+		else if (ratingBar.getRating() == 2f)
+		{
+			stars.getDrawable(2).setColorFilter(colorTwoStars, PorterDuff.Mode.SRC_ATOP);
+			stars.getDrawable(1).setColorFilter(colorTwoStars, PorterDuff.Mode.SRC_ATOP);
+		}
+		//change color of 1 stars
+		else if (ratingBar.getRating() == 1f)
+		{
+			stars.getDrawable(2).setColorFilter(colorOneStar, PorterDuff.Mode.SRC_ATOP);
+			stars.getDrawable(1).setColorFilter(colorOneStar, PorterDuff.Mode.SRC_ATOP);
+		}
+	}
 
     private void setUI(View rootview) {
         // Set date of page
@@ -135,6 +191,7 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
         eT_Date.setText(android.text.format.DateFormat.format("MMMM dd, yyyy", gcDate));
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -142,7 +199,8 @@ public class JournalFragment extends Fragment implements Button.OnClickListener,
                 updateDayReflectionDB();
                 Toast.makeText(getActivity(), "Thanks for submitting your reflection for today!", Toast.LENGTH_LONG).show();
                 showCongratsFragment(v);
-        }
+                break;
+		}
     }
 
     private void showCongratsFragment(View v) {

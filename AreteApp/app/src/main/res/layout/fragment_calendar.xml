@@ -13,10 +13,12 @@
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
-            android:layout_height="393dp"
+            android:layout_height="272dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginTop="64dp" />
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="35dp" />
+
 
         <Button
             android:id="@+id/buttonJumpToDate"
@@ -32,7 +34,7 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="313dp"
+            android:layout_height="213dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentBottom="true"

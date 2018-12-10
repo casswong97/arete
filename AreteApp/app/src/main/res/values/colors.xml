@@ -3,4 +3,11 @@
     <color name="colorPrimary">#f1d8a7</color>
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#9e9d94</color>
+
+    <color name="colorZeroStars">#9e9d94</color>
+    <color name="colorFiveStars">#16d8bf</color>
+    <color name="colorFourStars">#73e7d8</color>
+    <color name="colorThreeStars">#a1efe5</color>
+    <color name="colorTwoStars">#cef6f1</color>
+    <color name="colorOneStar">#f1fcfb</color>
 </resources>

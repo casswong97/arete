@@ -36,6 +36,7 @@
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
+        android:text="user@gmail.com"
         tools:layout_editor_absoluteX="108dp"
         tools:layout_editor_absoluteY="138dp" />
 
@@ -50,6 +51,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:text="123456"
         tools:layout_editor_absoluteX="108dp"
         tools:layout_editor_absoluteY="204dp" />
 
