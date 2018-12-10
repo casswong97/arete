@@ -3,6 +3,7 @@ package com.example.veronica.areteapp;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -26,6 +37,9 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
     private TextView viewGreeting;
     private EditText editTextAnswer;
     private ImageButton buttonEdit;
+    private FirebaseAuth mAuth;
+    private String email;
+    private String dateKey;
 
     private ImageView imgMorning, imgAfternoon, imgEvening, imgNight;
 
@@ -38,6 +52,15 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
                              Bundle savedInstanceState)
     {
         View rootview = inflater.inflate(R.layout.fragment_home, container, false);
+
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        email = LoginActivity.EncodeString(user.getEmail());
+
+        Date date = new GregorianCalendar().getTime();
+        SimpleDateFormat sF = new SimpleDateFormat("dd-MM-yyyy");
+        dateKey = sF.format(date.getTime());
+
         viewGreeting = (TextView) rootview.findViewById(R.id.viewGreeting);
         editTextAnswer = (EditText) rootview.findViewById(R.id.editTextAnswer);
         buttonEdit = (ImageButton) rootview.findViewById(R.id.buttonEdit);
@@ -49,10 +72,33 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
 
         buttonEdit.setOnClickListener(this);
 
+        setTodayIf();
         setGreeting();
 
         // Inflate the layout for this fragment
         return rootview;
+    }
+
+    private void setTodayIf()
+    {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference rootRef = database.getReference("Users");
+
+        final DatabaseReference todayIf = rootRef.child(email).child("Calendar").child(dateKey).child("todayIf");
+        todayIf.addListenerForSingleValueEvent(new ValueEventListener()
+        {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            {
+                if (dataSnapshot.exists())
+                    editTextAnswer.setText(dataSnapshot.getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError)
+            {
+            }
+        });
     }
 
     private void setGreeting()
@@ -92,8 +138,28 @@ public class HomeFragment extends Fragment implements Button.OnClickListener
     {
         switch (v.getId())
         {
+            // saves "Today if" goal in DB
             case R.id.buttonEdit:
-                Toast.makeText(getActivity(), "You've submitted your daily goal!", Toast.LENGTH_SHORT).show();
+                final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference rootRef = database.getReference("Users");
+
+                final DatabaseReference todayIf = rootRef.child(email).child("Calendar").child(dateKey).child("todayIf");
+                todayIf.addListenerForSingleValueEvent(new ValueEventListener()
+                   {
+                       @Override
+                       public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+                       {
+                            todayIf.setValue(editTextAnswer.getText().toString());
+                       }
+
+                       @Override
+                       public void onCancelled(@NonNull DatabaseError databaseError)
+                       {
+                       }
+                   });
+
+                Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 }

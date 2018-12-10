@@ -434,8 +434,11 @@ public class ListFragment extends Fragment implements CompoundButton.OnCheckedCh
 			}
 		});
 		builder.setNegativeButton("Cancel", null);
+		if (title == "Add a task")
+			builder.setIcon(R.drawable.pencil_add);
+		else
+			builder.setIcon(R.drawable.partyhat);
 
-		builder.setIcon(R.drawable.partyhat);
 		builder.create().show();
 	}
 
